@@ -12,3 +12,8 @@ To implement this script you will need the following:
 4. A host or container to run this on
 5. This conversion tool https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format
 6. unzip utility
+
+
+Required Packages
+- unzip
+- libwww-perl libmime-lite-perl libnet-ip-perl
