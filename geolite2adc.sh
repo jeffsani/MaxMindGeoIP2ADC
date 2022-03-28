@@ -12,7 +12,7 @@ CITRIX_ADC_IP=10.0.0.105
 
 #Local Variables
 DBTYPE="Country" #Choose Country or City
-LANG="en" #en, de, fr, es, jp, pt-BR, ru, or zh"
+LANGUAGE="en" #en, de, fr, es, jp, pt-BR, ru, or zh"
 LOGFILE="$(date '+%m%d%Y')-Convert_GeoIPDB_To_Netscaler_Format.log"
 
 #Constants
@@ -55,7 +55,7 @@ if [ "$CEHCKSUM" = "OK" ]; then #convert and transfer file to ADC
    unzip -j GeoLite2-$DBTYPE-CSV_$(date '+%Y%m%d').zip;
    echo "Unzipped GeoLite2-$DBTYPE-CSV_$(date '+%Y%m%d').zip" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    #Run the Citrix tool to convert the DB to NetScaler format
-   perl Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl -b GeoLite2-$DBTYPE-Blocks-IPv4.csv -i GeoLite2-$DBTYPE-Blocks-IPv6.csv -l  GeoLite2-$DBTYPE-Locations-$LANG.csv -o Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -p Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -logfile $LOGFILE;
+   perl Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl -b GeoLite2-$DBTYPE-Blocks-IPv4.csv -i GeoLite2-$DBTYPE-Blocks-IPv6.csv -l  GeoLite2-$DBTYPE-Locations-$LANGUAGE.csv -o Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -p Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -logfile $LOGFILE;
    echo "Successfully converted MaxMind GeoLite2 IPDBs to NetScaler format..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    #Unzip converted files
    echo "Preparing files for transfer to ADCs..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
