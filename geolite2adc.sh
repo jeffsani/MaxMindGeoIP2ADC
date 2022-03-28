@@ -50,8 +50,8 @@ let DIFF=($(date +%s -d "$NOW")-$(date +%s -d "$LAST_MODIFIED"))/86400
 if [ $DIFF le 2 ]; then #proceed with download of file
   echo "GeoLite2 DB is was updated $DIFF days ago, commencing with downlaod..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
   # Download the file
-  curl -s "GEODB_URL" -o GeoLite2-$DBTYPE-CSV_$(date '+%Y%m%d').zip;
-  curl -s "GEODB_CHECKSUM" -o GeoLite2-$DBTYPE-CSV_$(date '+%Y%m%d').zip.sha256;
+  curl -s -O -J "GEODB_URL" -o GeoLite2-$DBTYPE-CSV_$(date '+%Y%m%d').zip;
+  curl -s -O -J "GEODB_CHECKSUM" -o GeoLite2-$DBTYPE-CSV_$(date '+%Y%m%d').zip.sha256;
   echo "GeoLite2-$DBTYPE-CSV_$(date '+%Y%m%d').zip and GeoLite2-$DBTYPE-CSV_$(date '+%Y%m%d').zip.sha256 checksum files successfully downloaded..." 2>&1 | ts '[%H:%M:%S]' | tee -a $LOGFILE
 else
   # Exit if file has not been updated
