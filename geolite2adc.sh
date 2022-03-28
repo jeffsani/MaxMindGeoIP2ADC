@@ -1,8 +1,8 @@
 #!/bin/bash
 
-set -e
-set -u
-set -o pipefail
+#set -e
+#set -u
+#set -o pipefail
 
 # Variables to put into environment variables rather than leaving in the script
 LICENSE_KEY="141nr9qnsbEnkATO"
