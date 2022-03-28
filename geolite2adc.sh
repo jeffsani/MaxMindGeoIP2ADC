@@ -10,6 +10,18 @@ CITRIX_ADC_USER="nsroot"
 CITRIX_ADC_PASSWORD="Marigold"
 CITRIX_ADC_IP=10.0.0.105
 
+#Local Variables
+DBTYPE="Country" #Choose Country or City
+LANG="en" #en, de, fr, es, jp, pt-BR, ru, or zh"
+LOGFILE="$(date '+%m%d%Y')-Convert_GeoIPDB_To_Netscaler_Format.log"
+
+#Constants
+GEODB_COUNTRY_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=${LICENSE_KEY}&suffix=zip"
+GEODB_COUNTRY_CHECKSUM="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=${LICENSE_KEY}&suffix=zip.sha256"
+GEODB_CITY_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${LICENSE_KEY}&suffix=zip"
+GEODB_CITY_CHECKSUM="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${LICENSE_KEY}&suffix=zip.sha256"
+CITRIX_ADC_GEOIP_PATH="/var/netscaler/inbuilt_db"
+
 #Initiate Log
 echo "User $(whoami) started the script" | ts '[%H:%M:%S]' | tee -a $LOGFILE
 echo "Citrix ADC Letsencrypt Certificate Automation Log" | ts '[%H:%M:%S]' | ts '[%H:%M:%S]' | tee -a $LOGFILE
@@ -19,18 +31,6 @@ if [ -z "${LICENSE_KEY}" OR "${CITRIX_ADC_USER}" OR "${CITRIX_ADC_PASSWORD}"]; t
     echo "One of the required environment variable for the script is not set";
     exit 1;
 fi
-
-#Constants
-GEODB_COUNTRY_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=${LICENSE_KEY}&suffix=zip"
-GEODB_COUNTRY_CHECKSUM="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=${LICENSE_KEY}&suffix=zip.sha256"
-GEODB_CITY_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${LICENSE_KEY}&suffix=zip"
-GEODB_CITY_CHECKSUM="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${LICENSE_KEY}&suffix=zip.sha256"
-CITRIX_ADC_GEOIP_PATH="/var/netscaler/inbuilt_db"
-
-#Local Variables
-DBTYPE="Country" #Choose Country or City
-LANG="en" #en, de, fr, es, jp, pt-BR, ru, or zh"
-LOGFILE="$(date '+%m%d%Y')-Convert_GeoIPDB_To_Netscaler_Format.log"
 
 #Set the working directory to /var/tmp
 cd /var/tmp/
