@@ -24,16 +24,13 @@ CITRIX_ADC_GEOIP_PATH="/var/netscaler/inbuilt_db"
 
 #Initiate Log
 echo "User $(whoami) started the script" | ts '[%H:%M:%S]' | tee -a $LOGFILE
-echo "Citrix ADC Letsencrypt Certificate Automation Log" | ts '[%H:%M:%S]' | ts '[%H:%M:%S]' | tee -a $LOGFILE
+echo "Citrix ADC Letsencrypt Certificate Automation Log" | ts '[%H:%M:%S]' | tee -a $LOGFILE
 
 #Check to see if one of the required environment variables for the script is not set
 if [ -z "${LICENSE_KEY}" OR "${CITRIX_ADC_USER}" OR "${CITRIX_ADC_PASSWORD}"]; then
     echo "One of the required environment variable for the script is not set";
     exit 1;
 fi
-
-#Set the working directory to /var/tmp
-cd /var/tmp/
 
 #Check to see if DB has been updated within the last 2 days
 LAST_MODIFIED=$(curl -s -I "$GEODB_URL" | grep -Fi Last-Modified: | awk {'print $3,$4,$5,$6'})
