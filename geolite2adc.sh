@@ -24,25 +24,25 @@ echo "Citrix ADC Letsencrypt Certificate Automation Log" | ts '[%H:%M:%S]' | tee
 
 # Check to see if one of the required environment variables for the script is not set
 if [[ -z "${LICENSE_KEY}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWORD}" ]]; then
-    echo "One of the required environment variable for the script is not set";
+    echo "One of the required environment variable for the script is not set" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
     exit 1;
 fi
 
 # Set GEODB_URL and GEODB_CHECKSUM based on DBTYPE variable
 case $DBTYPE in
-   Country)
+   "Country")
       # Use permalinks for the Country GeoIPDB
       GEODB_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=${LICENSE_KEY}&suffix=zip"
       GEODB_URL_CHECKSUM="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=${LICENSE_KEY}&suffix=zip.sha256"
    ;;
-   City)
+   "City")
 	    # Use permalinks for the City GeoIPDB
       GEODB_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${LICENSE_KEY}&suffix=zip"
       GEODB_CHECKSUM="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${LICENSE_KEY}&suffix=zip.sha256"
 	 ;;
    *)
       # Invalid DBTYPE set
-      echo "Variable DBTYPE set to invalid option...";
+      echo "Variable DBTYPE set to invalid option..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
       exit 1;
    ;;    
 esac
@@ -54,9 +54,9 @@ let DIFF=($(date +%s -d "$NOW")-$(date +%s -d "$LAST_MODIFIED"))/86400
 if [ $DIFF le 2 ]; then #proceed with download of file
   echo "GeoLite2 DB is was updated $DIFF days ago, commencing with downlaod..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
   # Download the file
-  curl -s "GEODB_URL" -o GeoLite2-$DBTYPE-CSV.zip;
-  curl -s "GEODB_CHECKSUM" -o GeoLite2-$DBTYPE-CSV.zip.sha256;
-  echo "GeoLite2 DB and checksum files successfully downloaded..." 2>&1 | ts '[%H:%M:%S]' | tee -a $LOGFILE
+  curl -s "$GEODB_URL" -o GeoLite2-$DBTYPE-CSV.zip;
+  curl -s "$GEODB_CHECKSUM" -o GeoLite2-$DBTYPE-CSV.zip.sha256;
+  echo "GeoLite2 DB and checksum files for $DBTYPE successfully downloaded..." 2>&1 | ts '[%H:%M:%S]' | tee -a $LOGFILE
 else
   # Exit if file has not been updated
   echo "The file has not been updated.  Exiting..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
@@ -65,7 +65,7 @@ fi
 
 # Compare downloaded file to checksum
 CHECKSUM=$(sha256sum - c GeoLite2-$DBTYPE-CSV.zip.sha256)
-if [ "$CEHCKSUM" = "OK" ]; then #convert and transfer file to ADC
+if [[ "$CEHCKSUM" = "OK" ]]; then #convert and transfer file to ADC
    # Unzip it
    unzip -j GeoLite2-$DBTYPE-CSV.zip;
    echo "Unzipped $GeoLite2-$DBTYPE-CSV.zip.sha256" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
