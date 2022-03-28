@@ -36,9 +36,9 @@ case $DBTYPE in
       GEODB_URL_CHECKSUM="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=${LICENSE_KEY}&suffix=zip.sha256"
    ;;
    "City")
-	   # Use permalinks for the City GeoIPDB
-     GEODB_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${LICENSE_KEY}&suffix=zip"
-     GEODB_CHECKSUM="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${LICENSE_KEY}&suffix=zip.sha256"
+	    # Use permalinks for the City GeoIPDB
+      GEODB_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${LICENSE_KEY}&suffix=zip"
+      GEODB_CHECKSUM="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${LICENSE_KEY}&suffix=zip.sha256"
 	 ;;
 ;;
 esac
@@ -50,9 +50,9 @@ let DIFF=($(date +%s -d "$NOW")-$(date +%s -d "$LAST_MODIFIED"))/86400
 if [ $DIFF le 2 ]; then #proceed with download of file
   echo "GeoLite2 DB is was updated $DIFF days ago, commencing with downlaod..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
   # Download the file
-  curl -s -O -J "GEODB_URL" -o GeoLite2-$DBTYPE-CSV_$(date '+%Y%m%d').zip;
-  curl -s -O -J "GEODB_CHECKSUM" -o GeoLite2-$DBTYPE-CSV_$(date '+%Y%m%d').zip.sha256;
-  echo "GeoLite2-$DBTYPE-CSV_$(date '+%Y%m%d').zip and GeoLite2-$DBTYPE-CSV_$(date '+%Y%m%d').zip.sha256 checksum files successfully downloaded..." 2>&1 | ts '[%H:%M:%S]' | tee -a $LOGFILE
+  curl -s "GEODB_URL" -o GeoLite2-$DBTYPE-CSV.zip;
+  curl -s "GEODB_CHECKSUM" -o GeoLite2-$DBTYPE-CSV.zip.sha256;
+  echo "GeoLite2 DB and checksum files successfully downloaded..." 2>&1 | ts '[%H:%M:%S]' | tee -a $LOGFILE
 else
   # Exit if file has not been updated
   echo "The file has not been updated.  Exiting..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
@@ -60,14 +60,14 @@ else
 fi
 
 # Compare downloaded file to checksum
-CHECKSUM=$(sha256sum - c GeoLite2-$DBTYPE-CSV_$(date '+%Y%m%d').zip.sha256)
+CHECKSUM=$(sha256sum - c GeoLite2-$DBTYPE-CSV.zip.sha256)
 if [ "$CEHCKSUM" = "OK" ]; then #convert and transfer file to ADC
    # Unzip it
-   unzip -j GeoLite2-$DBTYPE-CSV_$(date '+%Y%m%d').zip;
-   echo "Unzipped GeoLite2-$DBTYPE-CSV_$(date '+%Y%m%d').zip" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+   unzip -j GeoLite2-$DBTYPE-CSV.zip;
+   echo "Unzipped $GeoLite2-$DBTYPE-CSV.zip.sha256" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    #Run the Citrix tool to convert the DB to NetScaler format
    perl Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl -b GeoLite2-$DBTYPE-Blocks-IPv4.csv -i GeoLite2-$DBTYPE-Blocks-IPv6.csv -l  GeoLite2-$DBTYPE-Locations-$LANGUAGE.csv -o Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -p Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -logfile $LOGFILE;
-   echo "Successfully converted MaxMind GeoLite2 IPDBs to NetScaler format..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+   echo "Successfully converted MaxMind GeoLite2 IP DBs to NetScaler format..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    # Unzip converted files
    echo "Preparing files for transfer to ADCs..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    gunzip Citrix_Netscaler_InBuilt_GeoIP_DB*;
