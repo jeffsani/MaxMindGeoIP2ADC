@@ -51,7 +51,7 @@ esac
 LAST_MODIFIED=$(curl -s -I "$GEODB_URL" | grep -Fi Last-Modified: | awk {'print $3,$4,$5,$6'})
 NOW=$(date | awk {'print $2,$3,$4,$5'})
 let DIFF=($(date +%s -d "$NOW")-$(date +%s -d "$LAST_MODIFIED"))/86400
-if [ $DIFF le 2 ]; then #proceed with download of file
+if [[ $DIFF -le 2 ]]; then #proceed with download of file
   echo "GeoLite2 DB is was updated $DIFF days ago, commencing with downlaod..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
   # Download the file
   curl -s "$GEODB_URL" -o GeoLite2-$DBTYPE-CSV.zip;
