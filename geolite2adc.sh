@@ -65,7 +65,7 @@ fi
 
 # Compare downloaded file to checksum
 CHECKSUM=$(sha256sum - c GeoLite2-$DBTYPE-CSV.zip.sha256)
-if [[ "$CEHCKSUM" = "OK" ]]; then #convert and transfer file to ADC
+if [[ "$CEHCKSUM" -eq "OK" ]]; then #convert and transfer file to ADC
    # Unzip it
    unzip -j GeoLite2-$DBTYPE-CSV.zip;
    echo "Unzipped $GeoLite2-$DBTYPE-CSV.zip.sha256" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
