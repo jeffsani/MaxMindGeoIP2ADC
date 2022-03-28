@@ -2,7 +2,7 @@
 
 Initial version: 3/26/2022
 
-This script will automate the refresh of the InBuilt MaxMind GeoLite2 Location DB files Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 and Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 for use with Static Proximity GSLB and Policy Expressions that reference a Location.  The script will run weekly, download the maxmind the free Geolite2 City or Country DB if it has been refreshed, perform a checksum on the file, convert it to the required NetScaler format, and upload the requisite directory where the InBuilt files are located to refresh them. 
+This script will automate the refresh of the InBuilt MaxMind GeoLite2 Location DB files Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 and Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 for use with Static Proximity GSLB and Policy Expressions that reference a Location.  The main benefit of this is that these file are not updated through upgrades.  The script will run weekly, download the maxmind the free Geolite2 City or Country DB if it has been refreshed, perform a checksum on the file, convert it to the required NetScaler format, and upload the requisite directory where the InBuilt files are located to refresh them. 
 
 To implement this script you will need the following:
 

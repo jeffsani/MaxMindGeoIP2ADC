@@ -27,7 +27,7 @@ echo "User $(whoami) started the script" | ts '[%H:%M:%S]' | tee -a $LOGFILE
 echo "Citrix ADC Letsencrypt Certificate Automation Log" | ts '[%H:%M:%S]' | tee -a $LOGFILE
 
 #Check to see if one of the required environment variables for the script is not set
-if [ -z "${LICENSE_KEY}" OR "${CITRIX_ADC_USER}" OR "${CITRIX_ADC_PASSWORD}"]; then
+if [[ -z "${LICENSE_KEY}" || "${CITRIX_ADC_USER}" || "${CITRIX_ADC_PASSWORD}" ]]; then
     echo "One of the required environment variable for the script is not set";
     exit 1;
 fi
