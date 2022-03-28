@@ -30,17 +30,21 @@ fi
 
 # Set GEODB_URL and GEODB_CHECKSUM based on DBTYPE variable
 case $DBTYPE in
-   "Country")
+   Country)
       # Use permalinks for the Country GeoIPDB
       GEODB_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=${LICENSE_KEY}&suffix=zip"
       GEODB_URL_CHECKSUM="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=${LICENSE_KEY}&suffix=zip.sha256"
    ;;
-   "City")
+   City)
 	    # Use permalinks for the City GeoIPDB
       GEODB_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${LICENSE_KEY}&suffix=zip"
       GEODB_CHECKSUM="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${LICENSE_KEY}&suffix=zip.sha256"
 	 ;;
-;;
+   *)
+      # Invalid DBTYPE set
+      echo "Variable DBTYPE set to invalid option...";
+      exit 1;
+   ;;    
 esac
 
 # Check to see if DB has been updated within the last 2 days
