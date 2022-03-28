@@ -49,8 +49,11 @@ esac
 
 # Check to see if DB has been updated within the last 2 days
 LAST_MODIFIED=$(curl -s -I "$GEODB_URL" | grep -Fi Last-Modified: | awk {'print $3,$4,$5,$6'})
+echo "GeoIP File Last Modified: $LAST_MODIFIED"
 NOW=$(date | awk {'print $2,$3,$4,$5'})
+echo "Today's date: $NOW"
 let DIFF=($(date +%s -d "$NOW")-$(date +%s -d "$LAST_MODIFIED"))/86400
+echo "Date diffrence: $DIFF"
 if [[ $DIFF -le 2 ]]; then #proceed with download of file
   echo "GeoLite2 DB is was updated $DIFF days ago, commencing with downlaod..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
   # Download the file
