@@ -4,7 +4,7 @@
 #set -e
 set -u
 set -o pipefail
-set -x
+#set -x
 
 # Variables to put into environment variables rather than leaving in the script
 LICENSE_KEY="141nr9qnsbEnkATO"
@@ -19,7 +19,7 @@ LOGFILE="$(date '+%m%d%Y')-Convert_GeoIPDB_To_Netscaler_Format.log"
 CONVERSION_TOOL="./conversiontool/Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl"
 
 # Constants
-CITRIX_ADC_GEOIP_PATH="/var/netscaler/inbuilt_db"
+CITRIX_ADC_GEOIPDB_PATH="/var/netscaler/inbuilt_db/"
 
 # Do Cleanup function
 function do_cleanup {
@@ -100,8 +100,8 @@ if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
    Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4_B64=$(base64 -w0 Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4);
    Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6_B64=$(base64 -w0 Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6);
    # Copy the files to ADC
-   curl -s -k -X POST -H "Accept: application/json" -H "Content-Type: application/vnd.com.citrix.netscaler.systemfile+json" -H "Authorization: Basic $(echo -n ${CITRIX_ADC_USER}:${CITRIX_ADC_PASSWORD} | base64)" "https://${CITRIX_ADC_IP}/nitro/v1/config/systemfile" -d '{"systemfile":{"filename":"Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4","filelocation":"${CITRIX_ADC_GEOIP_PATH}","filecontent":"${Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4_B64}","fileencoding":"BASE64"}}';
-   curl -s -k -X POST -H "Accept: application/json" -H "Content-Type: application/vnd.com.citrix.netscaler.systemfile+json" -H "Authorization: Basic $(echo -n ${CITRIX_ADC_USER}:${CITRIX_ADC_PASSWORD} | base64)" "https://${CITRIX_ADC_IP}/nitro/v1/config/systemfile" -d '{"systemfile":{"filename":"Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6","filelocation":"${CITRIX_ADC_GEOIP_PATH}","filecontent":"${Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6_B64}","fileencoding":"BASE64"}}';
+   curl -s -k -X POST -H "Accept: application/json" -H "Content-Type: application/vnd.com.citrix.netscaler.systemfile+json" -H "Authorization: Basic $(echo -n ${CITRIX_ADC_USER}:${CITRIX_ADC_PASSWORD} | base64)" "https://${CITRIX_ADC_IP}/nitro/v1/config/systemfile" -d '{"systemfile":{"filename":"Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4","filelocation":"${CITRIX_ADC_GEOIPDB_PATH}","filecontent":"${Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4_B64}","fileencoding":"BASE64"}}';
+   curl -s -k -X POST -H "Accept: application/json" -H "Content-Type: application/vnd.com.citrix.netscaler.systemfile+json" -H "Authorization: Basic $(echo -n ${CITRIX_ADC_USER}:${CITRIX_ADC_PASSWORD} | base64)" "https://${CITRIX_ADC_IP}/nitro/v1/config/systemfile" -d '{"systemfile":{"filename":"Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6","filelocation":"${CITRIX_ADC_GEOIPDB_PATH}","filecontent":"${Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6_B64}","fileencoding":"BASE64"}}';
    echo "Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 and Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 transferred to ADC with IP $CITRIX_ADC_IP" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
 else
   echo "The checksum failed.  File is corrupt or tampered with in transit..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
