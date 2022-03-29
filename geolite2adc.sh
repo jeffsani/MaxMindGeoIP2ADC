@@ -66,6 +66,7 @@ else
 fi
 
 # Compare downloaded file to checksum
+echo "Comparing sha256 checksum to verify file integrity before preoceeding..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
 CHECKSUM=$(sha256sum - c GeoLite2-$DBTYPE-CSV.zip.sha256)
 if [[ "$CEHCKSUM" -eq "OK" ]]; then #convert and transfer file to ADC
    echo "The Maxmind GeoLite2 IP Database file checksum is verified. Unpacking archive for conversion..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
@@ -73,8 +74,15 @@ if [[ "$CEHCKSUM" -eq "OK" ]]; then #convert and transfer file to ADC
    unzip -j GeoLite2-$DBTYPE-CSV.zip;
    echo "Unzipped $GeoLite2-$DBTYPE-CSV.zip.sha256" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    #Run the Citrix tool to convert the DB to NetScaler format
-   perl Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl -b GeoLite2-$DBTYPE-Blocks-IPv4.csv -i GeoLite2-$DBTYPE-Blocks-IPv6.csv -l  GeoLite2-$DBTYPE-Locations-$LANGUAGE.csv -o Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -p Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -logfile $LOGFILE;
-   echo "Successfully converted MaxMind GeoLite2 IP Database files to NetScaler format..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+   CONVERSTION_TOOL_PATH=./conversiontool/perl Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl
+   if [ -f "$CONVERSTION_TOOL_PATH" ]; then
+      ./conversiontool/perl Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl -b GeoLite2-$DBTYPE-Blocks-IPv4.csv -i GeoLite2-$DBTYPE-Blocks-IPv6.csv -l  GeoLite2-$DBTYPE-Locations-$LANGUAGE.csv -o Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -p Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -logfile $LOGFILE;
+      echo "Successfully converted MaxMind GeoLite2 IP Database files to NetScaler format..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+   else 
+      echo "The Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl was not present, please refer to the README.md for the script requirements - Exiting..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+      do_cleanup;
+      exit 1;
+   fi
    # Unzip converted files
    echo "Preparing files for transfer to ADCs..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    gunzip Citrix_Netscaler_InBuilt_GeoIP_DB*;
@@ -87,9 +95,14 @@ if [[ "$CEHCKSUM" -eq "OK" ]]; then #convert and transfer file to ADC
    echo "Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 and Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 transferred to ADC with IP $ADC_IP" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
 else
   echo "The checksum failed.  File is corrupt or tampered with in transit..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+  do_cleanup;
   exit 1;
 fi
 
 # Do Cleanup
+function do_cleanup {
 echo "Cleaning up disposable files..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
-rm -rf *.csv* *.txt *.zip
+rm -f *.csv* *.txt *.zip
+}
+
+exit 0

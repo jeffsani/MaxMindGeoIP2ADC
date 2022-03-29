@@ -12,8 +12,8 @@ export LC_ALL=en_US.UTF-8">>~/.bash_profile
 sudo apt-update
 sudo apt install unzip libwww-perl libmime-lite-perl libnet-ip-perl git
 
-# clone git repo for NetScaler format conversion script
-git clone 
+# clone git repo for NetScaler format conversion script in to same directory
+git clone https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format.git ./conversiontool
 
 # Create cron job for scheduling the script to be run weekly
 
