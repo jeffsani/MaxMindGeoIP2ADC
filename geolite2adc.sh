@@ -9,7 +9,7 @@ set -x
 # Variables to put into environment variables rather than leaving in the script
 LICENSE_KEY="141nr9qnsbEnkATO"
 CITRIX_ADC_USER="nsroot"
-CITRIX_ADC_PASSWORD="Marigold"
+CITRIX_ADC_PASSWORD="Marig0ld"
 CITRIX_ADC_IP=10.0.0.105
 
 # Local Variables
@@ -109,4 +109,5 @@ else
   exit 1;
 fi
 
+do_cleanup
 exit 0
