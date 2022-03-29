@@ -59,8 +59,8 @@ if [[ $DIFF -le 2 ]]; then #proceed with download of file
   echo "GeoLite2 DB is was updated $DIFF days ago, commencing with downlaod..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
   # Download the file
   echo "Downloading $GEOIPDB_URL...";
-  curl -s "$GEODB_URL" -o GeoLite2-$DBTYPE-CSV.zip;
-  curl -s "$GEODB_CHECKSUM" -o GeoLite2-$DBTYPE-CSV.zip.sha256;
+  curl -s "$GEOIPDB_URL" -o GeoLite2-$DBTYPE-CSV.zip;
+  curl -s "$GEOIPDB_CHECKSUM" -o GeoLite2-$DBTYPE-CSV.zip.sha256;
   echo "The Maxmind GeoLite2 IP DB and checksum files for $DBTYPE successfully downloaded..."  | ts '[%H:%M:%S]' | tee -a $LOGFILE;
 else
   # Exit if file has not been updated
