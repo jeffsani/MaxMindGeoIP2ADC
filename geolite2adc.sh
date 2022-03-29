@@ -16,10 +16,16 @@ CITRIX_ADC_IP=10.0.0.105
 DBTYPE="Country" #Choose Country or City
 LANGUAGE="en" #en, de, fr, es, jp, pt-BR, ru, or zh"
 LOGFILE="$(date '+%m%d%Y')-Convert_GeoIPDB_To_Netscaler_Format.log"
-CONVERSTION_TOOL_PATH="./conversiontool/perl Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl"
+CONVERSION_TOOL="./conversiontool/perl Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl"
 
 # Constants
 CITRIX_ADC_GEOIP_PATH="/var/netscaler/inbuilt_db"
+
+# Do Cleanup function
+function do_cleanup {
+echo "Cleaning up disposable files..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+rm -f *.csv* *.txt *.zip
+}
 
 # Initiate Log
 echo "User $(whoami) started the script" | ts '[%H:%M:%S]' | tee -a $LOGFILE
@@ -79,8 +85,8 @@ if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
    unzip -j GeoLite2-$DBTYPE-CSV.zip;
    echo "Unzipped $GeoLite2-$DBTYPE-CSV.zip.sha256" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    #Run the Citrix tool to convert the DB to NetScaler format
-      if [ -f "$CONVERSTION_TOOL_PATH" ]; then
-      ./conversiontool/perl Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl -b GeoLite2-$DBTYPE-Blocks-IPv4.csv -i GeoLite2-$DBTYPE-Blocks-IPv6.csv -l  GeoLite2-$DBTYPE-Locations-$LANGUAGE.csv -o Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -p Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -logfile $LOGFILE;
+      if [ -f "$CONVERSTION_TOOL" ]; then
+         $CONVERSTION_TOOL -b GeoLite2-$DBTYPE-Blocks-IPv4.csv -i GeoLite2-$DBTYPE-Blocks-IPv6.csv -l  GeoLite2-$DBTYPE-Locations-$LANGUAGE.csv -o Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -p Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -logfile $LOGFILE;
       echo "Successfully converted MaxMind GeoLite2 IP Database files to NetScaler format..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    else 
       echo "The Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl was not present, please refer to the README.md for the script requirements - Exiting..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
@@ -102,11 +108,5 @@ else
   do_cleanup;
   exit 1;
 fi
-
-# Do Cleanup
-function do_cleanup {
-echo "Cleaning up disposable files..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
-rm -f *.csv* *.txt *.zip
-}
 
 exit 0
