@@ -72,7 +72,7 @@ fi
 
 # Compare downloaded file to checksum
 echo "Comparing sha256 checksum to verify file integrity before preoceeding..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
-CHECKSUM=$(sha256sum -c $GEOIPDB_CHECKSUM_FILE)
+CHECKSUM=$(sha256sum -c $GEOIPDB_CHECKSUM_FILE | awk {'print $2'}) 
 if [[ "$CHECKSUM" -eq "OK" ]]; then #convert and transfer file to ADC
    echo "The Maxmind GeoLite2 IP Database file checksum is verified. Unpacking archive for conversion..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    # Unzip the GeoLite2 IP DB
