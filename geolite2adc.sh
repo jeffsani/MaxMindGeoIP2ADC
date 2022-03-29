@@ -19,7 +19,8 @@ LOGFILE="$(date '+%m%d%Y')-Convert_GeoIPDB_To_Netscaler_Format.log"
 CONVERSION_TOOL="./conversiontool/Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl"
 
 # Constants
-CITRIX_ADC_GEOIPDB_PATH="/var/netscaler/inbuilt_db/"
+#CITRIX_ADC_GEOIPDB_PATH="/var/netscaler/inbuilt_db/"
+CITRIX_ADC_GEOIPDB_PATH="/var/"
 
 # Do Cleanup function
 function do_cleanup {
@@ -83,7 +84,7 @@ if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
    echo "The Maxmind GeoLite2 IP Database file checksum is verified. Unpacking archive for conversion..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    # Unzip the GeoLite2 IP DB
    unzip -j $GEOIPDB_FILE;
-   echo "Unzipped $GeoLite2-$DBTYPE-CSV.zip.sha256" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+   echo "Unzipped $GEOIPDB_FILE..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    #Run the Citrix tool to convert the DB to NetScaler format
       if [ -f "$CONVERSION_TOOL" ]; then
          perl $CONVERSION_TOOL -b GeoLite2-$DBTYPE-Blocks-IPv4.csv -i GeoLite2-$DBTYPE-Blocks-IPv6.csv -l  GeoLite2-$DBTYPE-Locations-$LANGUAGE.csv -o Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -p Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -logfile $LOGFILE;
