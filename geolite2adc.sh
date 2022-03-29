@@ -36,7 +36,7 @@ case $DBTYPE in
    "Country")
       # Use permalinks for the Country GeoIPDB
       GEOIPDB_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country-CSV&license_key=${LICENSE_KEY}&suffix=zip"
-      GEOIPDB_URL_CHECKSUM="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country-CSV&license_key=${LICENSE_KEY}&suffix=zip.sha256"
+      GEOIPDB_CHECKSUM="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country-CSV&license_key=${LICENSE_KEY}&suffix=zip.sha256"
    ;;
    "City")
 	    # Use permalinks for the City GeoIPDB
