@@ -32,14 +32,13 @@ fi
 case $DBTYPE in
    "Country")
       # Use permalinks for the Country GeoIPDB
-      GEODB_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=${LICENSE_KEY}&suffix=zip"
-      echo "URL: $GEODB_URL"
-      GEODB_URL_CHECKSUM="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=${LICENSE_KEY}&suffix=zip.sha256"
+      GEOIPDB_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country-CSV&license_key=${LICENSE_KEY}&suffix=zip"
+      GEOIPDB_URL_CHECKSUM="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country-CSV&license_key=${LICENSE_KEY}&suffix=zip.sha256"
    ;;
    "City")
 	    # Use permalinks for the City GeoIPDB
-      GEODB_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${LICENSE_KEY}&suffix=zip"
-      GEODB_CHECKSUM="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${LICENSE_KEY}&suffix=zip.sha256"
+      GEOIPDB_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${LICENSE_KEY}&suffix=zip"
+      GEOIPDB_CHECKSUM="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${LICENSE_KEY}&suffix=zip.sha256"
 	 ;;
    *)
       # Invalid DBTYPE set
@@ -49,7 +48,7 @@ case $DBTYPE in
 esac
 
 # Check to see if DB has been updated within the last 2 days
-LAST_MODIFIED="$(curl -s -I "$GEODB_URL" | grep -Fi Last-Modified: | awk {'print $3,$4,$5,$6'})"
+LAST_MODIFIED="$(curl -s -I "$GEOIPDB_URL" | grep -Fi Last-Modified: | awk {'print $3,$4,$5,$6'})"
 echo "GeoIP File Last Modified: $LAST_MODIFIED"
 NOW=$(date | awk {'print $2,$3,$4,$5'})
 echo "Today's date: $NOW"
