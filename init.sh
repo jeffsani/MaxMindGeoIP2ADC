@@ -1,16 +1,20 @@
-#This script will setup your host for the geolite2adc script
+#!/bin/bash
+# init.sh
 
-#fix perl locale issue
+# This script will setup your host for the geolite2adc script on a debian or ubuntu host with the apt package manager
+
+# Fix perl locale issue
 echo "export LANGUAGE=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8">>~/.bash_profile
 
-#download and install pre-requisites
-apt install unzip libwww-perl libmime-lite-perl libnet-ip-perl
+# Download and install pre-requisites
+sudo apt-update
+sudo apt install unzip libwww-perl libmime-lite-perl libnet-ip-perl git
 
-#clone git repo for NetScaler format conversion script
+# clone git repo for NetScaler format conversion script
+git clone 
 
-
-#create cron job for scheduling the script to be run weekly
+# Create cron job for scheduling the script to be run weekly
 
 
