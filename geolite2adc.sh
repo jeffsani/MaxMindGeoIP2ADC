@@ -49,7 +49,7 @@ esac
 
 # Check to see if DB has been updated within the last 2 days
 LAST_MODIFIED="$(curl -s -I "$GEOIPDB_URL" | grep -Fi Last-Modified: | awk {'print $3,$4,$5,$6'})"
-echo "GeoIP File Last Modified: $LAST_MODIFIED" | ts '[%H:%M:%S]' | tee -a $LOGFILE
+echo "Maxmind GeoLite2 IP Database last modified: $LAST_MODIFIED" | ts '[%H:%M:%S]' | tee -a $LOGFILE
 NOW=$(date | awk {'print $2,$3,$4,$5'})
 let DIFF=($(date +%s -d "$NOW")-$(date +%s -d "$LAST_MODIFIED"))/86400
 if [[ $DIFF -le 2 ]]; then #proceed with download of file
@@ -67,13 +67,13 @@ fi
 # Compare downloaded file to checksum
 CHECKSUM=$(sha256sum - c GeoLite2-$DBTYPE-CSV.zip.sha256)
 if [[ "$CEHCKSUM" -eq "OK" ]]; then #convert and transfer file to ADC
-   echo "The Maxmind GeoLite2 IP file checksum is verified. Unpacking archive for conversion..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+   echo "The Maxmind GeoLite2 IP Database file checksum is verified. Unpacking archive for conversion..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    # Unzip the GeoLite2 IP DB
    unzip -j GeoLite2-$DBTYPE-CSV.zip;
    echo "Unzipped $GeoLite2-$DBTYPE-CSV.zip.sha256" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    #Run the Citrix tool to convert the DB to NetScaler format
    perl Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl -b GeoLite2-$DBTYPE-Blocks-IPv4.csv -i GeoLite2-$DBTYPE-Blocks-IPv6.csv -l  GeoLite2-$DBTYPE-Locations-$LANGUAGE.csv -o Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -p Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -logfile $LOGFILE;
-   echo "Successfully converted MaxMind GeoLite2 IP DBs to NetScaler format..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+   echo "Successfully converted MaxMind GeoLite2 IP Database files to NetScaler format..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    # Unzip converted files
    echo "Preparing files for transfer to ADCs..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    gunzip Citrix_Netscaler_InBuilt_GeoIP_DB*;
