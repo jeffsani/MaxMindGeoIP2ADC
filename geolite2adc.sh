@@ -59,8 +59,10 @@ if [[ $DIFF -le 2 ]]; then #proceed with download of file
   echo "GeoLite2 DB is was updated $DIFF days ago, commencing with downlaod..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
   # Download the file
   echo "Downloading $GEOIPDB_URL...";
-  curl -s "$GEOIPDB_URL" -o GeoLite2-$DBTYPE-CSV.zip;
-  curl -s "$GEOIPDB_CHECKSUM" -o GeoLite2-$DBTYPE-CSV.zip.sha256;
+  GEOIPDB_FILE=$(curl -s -w '%{filemane_effective}' -O "$GEOIPDB_URL");
+  echo "GeoIP DB File: $GEOIPDB_FILE";
+  GEOIPDB_CHECKSUM_FILE=$(curl -s -w '%{filemane_effective}' -O "$GEOIPDB_CHECKSUM");
+  echo "GeoIP DB Checksum File: $GEOIPDB_CHECKSUM_FILE";
   echo "The Maxmind GeoLite2 IP DB and checksum files for $DBTYPE successfully downloaded..."  | ts '[%H:%M:%S]' | tee -a $LOGFILE;
 else
   # Exit if file has not been updated
@@ -70,7 +72,7 @@ fi
 
 # Compare downloaded file to checksum
 echo "Comparing sha256 checksum to verify file integrity before preoceeding..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
-CHECKSUM=$(sha256sum - c GeoLite2-$DBTYPE-CSV.zip.sha256)
+CHECKSUM=$(sha256sum -c $GEOIPDB_CHECKSUM_FILE)
 if [[ "$CEHCKSUM" -eq "OK" ]]; then #convert and transfer file to ADC
    echo "The Maxmind GeoLite2 IP Database file checksum is verified. Unpacking archive for conversion..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    # Unzip the GeoLite2 IP DB
