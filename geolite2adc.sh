@@ -82,7 +82,7 @@ CHECKSUM=$(sha256sum -c $GEOIPDB_CHECKSUM_FILE | awk {'print $2'})
 if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
    echo "The Maxmind GeoLite2 IP Database file checksum is verified. Unpacking archive for conversion..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    # Unzip the GeoLite2 IP DB
-   unzip -j GeoLite2-$DBTYPE-CSV.zip;
+   unzip -j $GEOIPDB_FILE;
    echo "Unzipped $GeoLite2-$DBTYPE-CSV.zip.sha256" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    #Run the Citrix tool to convert the DB to NetScaler format
       if [ -f "$CONVERSION_TOOL" ]; then
