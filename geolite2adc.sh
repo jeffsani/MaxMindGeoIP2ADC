@@ -49,27 +49,26 @@ esac
 
 # Check to see if DB has been updated within the last 2 days
 LAST_MODIFIED="$(curl -s -I "$GEOIPDB_URL" | grep -Fi Last-Modified: | awk {'print $3,$4,$5,$6'})"
-echo "GeoIP File Last Modified: $LAST_MODIFIED"
+echo "GeoIP File Last Modified: $LAST_MODIFIED" | ts '[%H:%M:%S]' | tee -a $LOGFILE
 NOW=$(date | awk {'print $2,$3,$4,$5'})
-echo "Today's date: $NOW"
 let DIFF=($(date +%s -d "$NOW")-$(date +%s -d "$LAST_MODIFIED"))/86400
-echo "Date diffrence: $DIFF"
 if [[ $DIFF -le 2 ]]; then #proceed with download of file
   echo "GeoLite2 DB is was updated $DIFF days ago, commencing with downlaod..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
   # Download the file
   curl -s "$GEODB_URL" -o GeoLite2-$DBTYPE-CSV.zip;
   curl -s "$GEODB_CHECKSUM" -o GeoLite2-$DBTYPE-CSV.zip.sha256;
-  echo "GeoLite2 DB and checksum files for $DBTYPE successfully downloaded..." 2>&1 | ts '[%H:%M:%S]' | tee -a $LOGFILE
+  echo "The Maxmind GeoLite2 IP DB and checksum files for $DBTYPE successfully downloaded..."  | ts '[%H:%M:%S]' | tee -a $LOGFILE
 else
   # Exit if file has not been updated
-  echo "The file has not been updated.  Exiting..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+  echo "The Maxmind GeoLite2 IP Database file has not been updated.  Exiting..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
   exit;
 fi
 
 # Compare downloaded file to checksum
 CHECKSUM=$(sha256sum - c GeoLite2-$DBTYPE-CSV.zip.sha256)
 if [[ "$CEHCKSUM" -eq "OK" ]]; then #convert and transfer file to ADC
-   # Unzip it
+   echo "The Maxmind GeoLite2 IP file checksum is verified. Unpacking archive for conversion..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+   # Unzip the GeoLite2 IP DB
    unzip -j GeoLite2-$DBTYPE-CSV.zip;
    echo "Unzipped $GeoLite2-$DBTYPE-CSV.zip.sha256" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    #Run the Citrix tool to convert the DB to NetScaler format
@@ -92,4 +91,4 @@ fi
 
 # Do Cleanup
 echo "Cleaning up disposable files..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
-rm -rf *.csv* *.txt
+rm -rf *.csv* *.txt *.zip
