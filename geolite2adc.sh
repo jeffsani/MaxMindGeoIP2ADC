@@ -101,11 +101,14 @@ if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
    Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4_B64=$(base64 -w0 Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4);
    Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6_B64=$(base64 -w0 Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6);
    # Copy the files to ADC
-   API_RESPONSE1=$(curl -s -k -X -w "%{http_code}\n" POST -H "Accept: application/json" -H "Content-Type: application/vnd.com.citrix.netscaler.systemfile+json" -H "Authorization: Basic $(echo -n ${CITRIX_ADC_USER}:${CITRIX_ADC_PASSWORD} | base64)" "https://${CITRIX_ADC_IP}/nitro/v1/config/systemfile" -d '{"systemfile":{"filename":"Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4","filelocation":"${CITRIX_ADC_GEOIPDB_PATH}","filecontent":"${Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4_B64}","fileencoding":"BASE64"}}');
-   echo "$API_RESPONSE1"
-   API_RESPONSE2=$(curl -s -k -X -w "%{http_code}\n" POST -H "Accept: application/json" -H "Content-Type: application/vnd.com.citrix.netscaler.systemfile+json" -H "Authorization: Basic $(echo -n ${CITRIX_ADC_USER}:${CITRIX_ADC_PASSWORD} | base64)" "https://${CITRIX_ADC_IP}/nitro/v1/config/systemfile" -d '{"systemfile":{"filename":"Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6","filelocation":"${CITRIX_ADC_GEOIPDB_PATH}","filecontent":"${Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6_B64}","fileencoding":"BASE64"}}');
-   echo "$API_RESPONSE2"
-   echo "Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 and Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 transferred to ADC with IP $CITRIX_ADC_IP" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+   STATUS_CODE=$(curl -s -k  -w "%{http_code}\n" -X POST -H "Accept: application/json" -H "Content-Type: application/vnd.com.citrix.netscaler.systemfile+json" -H "Authorization: Basic $(echo -n ${CITRIX_ADC_USER}:${CITRIX_ADC_PASSWORD} | base64)" "https://${CITRIX_ADC_IP}/nitro/v1/config/systemfile" -d '{"systemfile":{"filename":"Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4","filelocation":"${CITRIX_ADC_GEOIPDB_PATH}","filecontent":"${Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4_B64}","fileencoding":"BASE64"}}');
+   if [[ "$STATUS_CODE" -ne 200 ]] ; then
+      echo "Citrix ADC Nitro API returned HTTP Status Code $STATUS_CODE..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+   fi
+   STATUS_CODE=$(curl -s -k -w "%{http_code}\n" -X POST -H "Accept: application/json" -H "Content-Type: application/vnd.com.citrix.netscaler.systemfile+json" -H "Authorization: Basic $(echo -n ${CITRIX_ADC_USER}:${CITRIX_ADC_PASSWORD} | base64)" "https://${CITRIX_ADC_IP}/nitro/v1/config/systemfile" -d '{"systemfile":{"filename":"Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6","filelocation":"${CITRIX_ADC_GEOIPDB_PATH}","filecontent":"${Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6_B64}","fileencoding":"BASE64"}}');
+   if [[ "$STATUS_CODE" -ne 200 ]] ; then
+      echo "Citrix ADC Nitro API returned HTTP Status Code $STATUS_CODE..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+   fi
 else
   echo "The checksum failed.  File is corrupt or tampered with in transit..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
   do_cleanup;
