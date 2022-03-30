@@ -76,7 +76,7 @@ else
   exit;
 fi
 
-# Compare downloaded file to checksum
+# Compare downloaded file to checksum and start file processing
 echo "Comparing sha256 checksum to verify file integrity before preoceeding..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
 CHECKSUM=$(sha256sum -c $GEOIPDB_CHECKSUM_FILE | awk {'print $2'}) 
 if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
