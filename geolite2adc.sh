@@ -7,7 +7,7 @@ set -o pipefail
 # Local Variables
 DBTYPE="Country" #Choose Country or City
 LANGUAGE="en" #en, de, fr, es, jp, pt-BR, ru, or zh"
-LOGFILE="$(date '+%m%d%Y')-Convert_GeoIPDB_To_Netscaler_Format.log"
+LOGFILE="$(date '+%m%d%Y')-maxmindgeolite2adc.log"
 CONVERSION_TOOL="./conversiontool/Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl"
 
 # Constants
