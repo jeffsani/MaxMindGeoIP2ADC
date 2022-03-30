@@ -18,13 +18,16 @@ To implement this script you will need the following:
 4. A host or container to run this on
 5. This conversion tool https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format
 6. unzip utility
-7. Environment variables set for the user running the script that contain the Citrix ADC user/pass, the Citrix ADC
+7. sshpass utility
+8. Environment variables set for the user running the script that contain the Citrix ADC user/pass, the Citrix ADC
 
 Required Packages (for Linux Host):
 - unzip libwww-perl libmime-lite-perl libnet-ip-perl git
 
 Automated Setup (For Linux Host):
+- Login to your host as the user you want to create the script under
 - Complete steps 1-3 in the requirements
 - Clone the repo into the desired directory on your linux host
     git clone https://github.com/jeffsani/maxmindgeolite2adc.git git <directory> (directory is optional)
+- cd to that directory
 - Run the init.sh script

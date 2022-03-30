@@ -19,8 +19,7 @@ LOGFILE="$(date '+%m%d%Y')-Convert_GeoIPDB_To_Netscaler_Format.log"
 CONVERSION_TOOL="./conversiontool/Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl"
 
 # Constants
-#CITRIX_ADC_GEOIPDB_PATH="/var/netscaler/inbuilt_db/"
-CITRIX_ADC_GEOIPDB_PATH="/nsconfig/"
+CITRIX_ADC_GEOIPDB_PATH="/var/netscaler/inbuilt_db"
 
 # Do Cleanup function
 function do_cleanup {
@@ -95,23 +94,18 @@ if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
       exit 1;
    fi
    # Unzip converted files
-   echo "Preparing files for transfer to ADCs..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+   echo "Preparing files for transfer to ADC..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    gunzip Citrix_Netscaler_InBuilt_GeoIP_DB*;
-   # Convert files to Base 64 for API
-   Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4_B64=$(base64 -w0 Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4);
-   Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6_B64=$(base64 -w0 Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6);
-   # Copy the files to ADC
-   echo "filelocation: $CITRIX_ADC_GEOIPDB_PATH"
-   exit 0
-   
-   STATUS_CODE=$(curl -s -k  -w "%{http_code}\n" -X POST -H "Accept: application/json" -H "Content-Type: application/vnd.com.citrix.netscaler.systemfile+json" -H "Authorization: Basic $(echo -n ${CITRIX_ADC_USER}:${CITRIX_ADC_PASSWORD} | base64)" "http://${CITRIX_ADC_IP}/nitro/v1/config/systemfile" -d '{"systemfile":{"filename":"Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4","filelocation":"${CITRIX_ADC_GEOIPDB_PATH}","filecontent":"${Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4_B64}","fileencoding":"BASE64"}}');
-   if [[ "$STATUS_CODE" -ne 200 ]]; then
-      echo "Citrix ADC Nitro API returned HTTP Status Code $STATUS_CODE..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
-   fi
-   STATUS_CODE=$(curl -s -k -w "%{http_code}\n" -X POST -H "Accept: application/json" -H "Content-Type: application/vnd.com.citrix.netscaler.systemfile+json" -H "Authorization: Basic $(echo -n ${CITRIX_ADC_USER}:${CITRIX_ADC_PASSWORD} | base64)" "http://${CITRIX_ADC_IP}/nitro/v1/config/systemfile" -d '{"systemfile":{"filename":"Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6","filelocation":"${CITRIX_ADC_GEOIPDB_PATH}","filecontent":"${Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6_B64}","fileencoding":"BASE64"}}');
-   if [[ "$STATUS_CODE" -ne 200 ]]; then
-      echo "Citrix ADC Nitro API returned HTTP Status Code $STATUS_CODE..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
-   fi
+   # Transfer the files to the ADC
+   echo "Transfering files to ADC..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+   sshpass -p "$CITRIX_ADC_PASSWORD" scp Citrix_Netscaler_InBuilt_GeoIP_DB_IPv* $CITRIX_ADC_USER@$CITRIX_ADC_IP:$CITRIX_ADC_GEOIPDB_PATH;
+   echo "Adding IPv4 and IPv6 GeoIP location files to ADC configuration for use in GSLB and PI..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+   # Add the location db files (benign if already present in config)
+   sshpass -p "$CITRIX_ADC_PASSWORD" ssh $CITRIX_ADC_USER@$CITRIX_ADC_IP "add locationFile /var/netscaler/inbuilt_db/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -format netscaler";
+   sshpass -p "$CITRIX_ADC_PASSWORD" ssh $CITRIX_ADC_USER@$CITRIX_ADC_IP "add locationFile6 /var/netscaler/inbuilt_db/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -format netscaler";
+   # Save the ns.conf - this will also invoke the filesync process to synchronize the db files to ha peer nodes or cluster nodes (note - watchdog will also eventually do this)
+   echo "Saving configuration and invoking filesync..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+   sshpass -p "$CITRIX_ADC_PASSWORD" ssh $CITRIX_ADC_USER@$CITRIX_ADC_IP "save config"
 else
   echo "The checksum failed.  File is corrupt or tampered with in transit..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
   do_cleanup;
