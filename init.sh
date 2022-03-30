@@ -29,7 +29,9 @@ sudo apt-update
 sudo apt install unzip libwww-perl libmime-lite-perl libnet-ip-perl git sshpass
 
 # Clone git repo for NetScaler format conversion script in to same directory
-git clone https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format.git ./conversiontool
+if [[ ! -d "./conversiontool" ]]; then
+   git clone https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format.git ./conversiontool
+fi
 
 # Create cron job for scheduling the script to be run weekly on Wed at 1AM
 crontab -l > geolite2adc
