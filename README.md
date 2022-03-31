@@ -26,6 +26,6 @@ Automated Setup (For Linux Host):
 - Login to your host as the user you want to create the script under
 - Complete steps 1-3 in the requirements
 - Clone the repo into the desired directory on your linux host:
-    git clone https://github.com/jeffsani/maxmindgeolite2adc.git git <directory> (directory is optional)
+    git clone https://github.com/jeffsani/maxmindgeolite2adc.git <directory> (directory is optional)
 - cd to that directory
 - Run the init.sh script
