@@ -12,8 +12,8 @@ According to the maxmind web site, the GeoIP Databases are updated each Tuesday 
 Requirements:
 To implement this script you will need the following:
 
-1. a Geolite2 Account setup at https://www.maxmind.com/en/geolite2/signup?lang=en
-2. a License Key - created post account setup and generated at https://www.maxmind.com/en/accounts/696069/license-key
+1. A Geolite2 Account setup at https://www.maxmind.com/en/geolite2/signup?lang=en
+2. An API License Key - created post account setup (step 1)
 3. Permalinks to the Country and/or City Geo IP Databases in CSV format 
 4. A host or container to run this on
 5. This conversion tool https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format
