@@ -17,12 +17,10 @@ To implement this script you will need the following:
 3. Permalinks to the Country and/or City Geo IP Databases in CSV format 
 4. A host or container to run this on
 5. This conversion tool https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format
-6. unzip utility
-7. sshpass utility
-8. Environment variables set for the user running the script that contain the Citrix ADC user/pass, the Citrix ADC
+6. Environment variables set for the user running the script that contain the Citrix ADC user/pass, and the Citrix ADC IP
 
-Required Packages (for Linux Host):
-- unzip libwww-perl libmime-lite-perl libnet-ip-perl git
+Required Packages (for Host):
+- unzip libwww-perl libmime-lite-perl libnet-ip-perl git unzip sshpass
 
 Automated Setup (For Linux Host):
 - Login to your host as the user you want to create the script under
