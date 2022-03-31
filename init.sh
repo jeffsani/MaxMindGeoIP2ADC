@@ -40,7 +40,7 @@ if [[ ! -d "./conversiontool" ]]; then
    echo "Repo not present - cloning from github..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
    git clone https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format.git ./conversiontool
 else
-   echo "Repo not present - cloning from github..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+   echo "Repo and tool already present - skipping clone..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 fi
 
 # Create cron job for scheduling the script to be run weekly on Wed at 1AM
