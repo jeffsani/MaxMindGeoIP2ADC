@@ -32,7 +32,7 @@ echo "Script variables set successfully..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 # Download and install pre-requisites
 echo "Installing required system pre-requisites..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 sudo apt-update
-sudo apt install unzip libwww-perl libmime-lite-perl libnet-ip-perl git sshpass
+sudo apt install unzip libwww-perl libmime-lite-perl libnet-ip-perl git sshpass moreutils
 
 # Clone git repo for NetScaler format conversion script in to same directory
 echo "Checking for MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format repo..." | ts '[%H:%M:%S]' | tee -a $LOGFILE

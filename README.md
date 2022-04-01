@@ -20,7 +20,7 @@ To implement this script you will need the following:
 6. Environment variables set for the user running the script that contain the Citrix ADC user/pass, and the Citrix ADC IP
 
 Required Packages (for Host):
-- unzip libwww-perl libmime-lite-perl libnet-ip-perl git unzip sshpass
+- unzip libwww-perl libmime-lite-perl libnet-ip-perl git unzip sshpass more utils
 
 Automated Setup (For Linux Host):
 - Login to your host as the user you want to create the script under

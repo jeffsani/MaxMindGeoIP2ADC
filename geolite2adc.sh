@@ -1,7 +1,7 @@
 #!/bin/bash
 # geolite2adc.sh
 
-set -u
+#set -u
 set -o pipefail
 
 # Local Variables
