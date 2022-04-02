@@ -28,4 +28,4 @@ Automated Setup (For Linux Host):
 - Clone the repo into the desired directory on your linux host:
     git clone https://github.com/jeffsani/maxmindgeolite2adc.git <directory> (directory is optional)
 - cd to that directory
-- Run the init.sh script
+- Run the geolite2adc-init.sh script
