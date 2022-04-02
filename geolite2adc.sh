@@ -8,7 +8,7 @@ set -o pipefail
 DBTYPE="Country" #Choose Country or City
 LANGUAGE="en" #en, de, fr, es, jp, pt-BR, ru, or zh"
 LOGFILE="$(date '+%m%d%Y')-maxmindgeolite2adc.log"
-CONVERSION_TOOL="./conversiontool/Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl"
+CONVERSION_TOOL="Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl"
 
 # Constants
 CITRIX_ADC_GEOIPDB_PATH="/var/netscaler/inbuilt_db"
@@ -21,11 +21,11 @@ rm -f *.csv* *.txt *.zip* Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 Citrix_Netscale
 
 # Initiate Log
 echo "User $(whoami) started the script" | ts '[%H:%M:%S]' | tee -a $LOGFILE
-echo "Citrix ADC Letsencrypt Certificate Automation Log" | ts '[%H:%M:%S]' | tee -a $LOGFILE
+echo "Starting geolite2adc Log..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 
 # Check to see if one of the required environment variables for the script is not set
-if [[ -z "${LICENSE_KEY}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWORD}" ]]; then
-    echo "One of the required environment variable for the script is not set" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+if [[ -z "${LICENSE_KEY}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWORD}" || -z "${CITRIX_ADC_IP}" ]]; then
+    echo "One of the required environment variable for the script is not set properly..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
     exit 1;
 fi
 
