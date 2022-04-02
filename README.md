@@ -9,7 +9,7 @@ This script will automate the refresh of the Citrix ADC (NetScaler) InBuilt MaxM
 
 According to the maxmind web site, the GeoIP Databases are updated each Tuesday - see https://support.maxmind.com/hc/en-us/articles/4408216129947-Download-and-Update-Databases.  Thus, the init script configures a cron job which is scheduled to run every Wednesday morning at 1:00AM to perform the update.  
 
-Requirements:
+Script Requirements:
 To implement this script you will need the following:
 
 1. A Geolite2 Account setup at https://www.maxmind.com/en/geolite2/signup?lang=en
@@ -21,6 +21,12 @@ To implement this script you will need the following:
 
 Required Packages (for Host):
 - unzip libwww-perl libmime-lite-perl libnet-ip-perl git unzip sshpass moreutils
+
+Required Environment Variables:
+LICENSE_KEY=XXXX
+CITRIX_ADC_USER=XXX
+CITRIX_ADC_PASSWORD=XXX
+CITRIX_ADC_IP=X.X.X.X
 
 Automated Setup (For Linux Host):
 - Login to your host as the user you want to create the script under
