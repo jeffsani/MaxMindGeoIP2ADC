@@ -22,17 +22,16 @@ read ADC_PASSWD
 echo "Enter your Citrix ADC NSIP:"
 read NSIP
 
-echo 'export LICENSE_KEY="$LICENSE"
-export CITRIX_ADC_USER="$ADC_USER"
-export CITRIX_ADC_PASSWORD="$ADC_PASSWD"
-export CITRIX_ADC_IP="$NSIP"' >> ~/.bashrc
-source ~/.bashrc
-# Check to see if the variables for the script set properly
+
 if [[ -z "${LICENSE_KEY}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWORD}" || -z "${CITRIX_ADC_IP}" ]]; then
-    echo "Script variables not set successfully - exiting..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
-    exit 1;
-else
+   echo 'export LICENSE_KEY="$LICENSE"
+   export CITRIX_ADC_USER="$ADC_USER"
+   export CITRIX_ADC_PASSWORD="$ADC_PASSWD"
+   export CITRIX_ADC_IP="$NSIP"' >> ~/.bashrc;
+   source ~/.bashrc;
    echo "Script variables set successfully..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+else
+   sed -i -e 's/LICENSE_KEY=.*/LICENSE_KEY=$LICENSE/' -e 's/CITRIX_ADC_USER=.*/CITRIX_ADC_USER=$ADC_USER/' -e 's/CITRIX_ADC_PASSWORD=.*/CITRIX_ADC_PASSWORD=$ADC_PASSWD/' -e 's/CITRIX_ADC_IP=.*/CITRIX_ADC_IP=$NSIP/' ~/.bashrc
 fi
 
 # Download and install pre-requisites
@@ -46,7 +45,7 @@ if [[ ! -d "./Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl" ]]; then
    echo "Conversion tool not present - downloading from github..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
    curl -s -O -J https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format/blob/master/Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl
 else
-   echo "Repo and tool already present - skipping download..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+   echo "Conversion tool already present - skipping download..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 fi
 
 # Create cron job for scheduling the script to be run weekly on Wed at 1AM
