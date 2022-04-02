@@ -1,7 +1,8 @@
 #!/bin/bash
-# init.sh
-
+# geolite2adc-init.sh
 # This script will setup your host for the geolite2adc script on a debian or fedora/centos based host
+
+set -o pipefail
 
 # Fix perl locale issue
 #echo "export LANGUAGE=en_US.UTF-8 
@@ -24,10 +25,12 @@ read NSIP
 
 
 if [[ -z "${LICENSE_KEY}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWORD}" || -z "${CITRIX_ADC_IP}" ]]; then
-   echo 'export LICENSE_KEY="$LICENSE"
+   echo '#Start-geolite2adc
+   export LICENSE_KEY="$LICENSE"
    export CITRIX_ADC_USER="$ADC_USER"
    export CITRIX_ADC_PASSWORD="$ADC_PASSWD"
-   export CITRIX_ADC_IP="$NSIP"' >> ~/.bashrc;
+   export CITRIX_ADC_IP="$NSIP"
+   #End-geolite2adc' >> ~/.bashrc;
    source ~/.bashrc;
    echo "Script variables set successfully..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
 else

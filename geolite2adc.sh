@@ -1,7 +1,8 @@
 #!/bin/bash
 # geolite2adc.sh
+# This script will automate the download and update of the Citrix ADC InBuilt geoip location db files based on the Maxmind GeoLite2 IP DB.
+# Please refer to README.md for more detailed information
 
-#set -u
 set -o pipefail
 
 # Local Variables
