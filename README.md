@@ -22,6 +22,7 @@ According to the maxmind web site, the GeoIP Databases are updated each Tuesday 
 </ol>
  
 <strong>Script Requirements:</strong></br>
+
 To implement this script you will need the following if you plan to implement manually and not use the init script:
 
 <ol type="1">
