@@ -25,8 +25,7 @@ read NSIP
 echo "Enter your Citrix ADC NSIP Port:"
 read NSIP_PORT
 
-
-if [[ -z "${LICENSE_KEY}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWORD}" || -z "${CITRIX_ADC_IP}" ]]; then
+if [[ -z "${LICENSE_KEY}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWORD}" || -z "${CITRIX_ADC_IP}" || -z "${CITRIX_ADC_PORT}" ]]; then
    echo '#Start-geolite2adc
    export LICENSE_KEY="$LICENSE"
    export CITRIX_ADC_USER="$ADC_USER"
@@ -47,7 +46,7 @@ which apt-get >/dev/null && {apt install unzip libwww-perl libmime-lite-perl lib
 
 # Download NetScaler format conversion script in to same directory
 echo "Checking for MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format repo..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-if [[ ! -d "./Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl" ]]; then
+if [[ ! -e "./Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl" ]]; then
    echo "Conversion tool not present - downloading from github..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
    curl -s -O -J https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format/blob/master/Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl
 else
