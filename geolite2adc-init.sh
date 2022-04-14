@@ -59,17 +59,17 @@ fi
 ssh-keyscan -t rsa,dsa $CITRIX_ADC_IP 2>&1 | sort -u - ~/.ssh/known_hosts > ~/.ssh/tmp_hosts
 mv ~/.ssh/tmp_hosts ~/.ssh/known_hosts
 
-if [ $CITRIX_ADC_PORT -eq "22" ]; then
-   ssh-keygen -F $CITRIX_ADC_IP -f ~/.ssh/known_hosts &>/dev/null;
+if [ $NSIP_PORT -eq "22" ]; then
+   ssh-keygen -F $NSIP -f ~/.ssh/known_hosts &>/dev/null;
    if [ "$?" -ne "0" ]; then 
       # Add ADC to known_hosts
-      ssh-keyscan $CITRIX_ADC_IP >> ~/.ssh/known_hosts;
+      ssh-keyscan $NSIP >> ~/.ssh/known_hosts;
    fi
 else 
-   ssh-keygen -F '[$CITRIX_ADC_IP]:$CITRIX_ADC_PORT' -f ~/.ssh/known_hosts &>/dev/null;
+   ssh-keygen -F '[$NSIP]:$NSIP_PORT' -f ~/.ssh/known_hosts &>/dev/null;
    if [ "$?" -ne "0" ]; then 
       # Add ADC to known_hosts
-      ssh-keyscan -p $CITRIX_ADC_PORT $CITRIX_ADC_IP >> ~/.ssh/known_hosts;
+      ssh-keyscan -p $NSIP_PORT $NSIP >> ~/.ssh/known_hosts;
    fi
 fi
 
