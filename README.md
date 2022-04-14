@@ -29,7 +29,11 @@ To implement this script you will need the following if you plan to implement ma
    <li>A Geolite2 Account setup at https://www.maxmind.com/en/geolite2/signup?lang=en</li>
    <li>An API License Key - created post account setup (step 1)</li>
    <li>Permalinks to the Country and/or City Geo IP Databases in CSV format </li>
-   <li>Pacakages: unzip libwww-perl libmime-lite-perl libnet-ip-perl git unzip sshpass moreutils</li>
+   <li>Required Packages:</li>
+       <ul>
+          <li>Ubuntu: unzip libwww-perl libmime-lite-perl libnet-ip-perl git unzip sshpass moreutils</li>
+          <li>CentOS/Fedora: unzip perl-libwww-perl perl-MIME-Lite perl-Net-IP perl-Time-Piece sshpass more-utils</li>
+       </ul>
    <li>This conversion tool https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format</li>
    <li>Environment variables set for the user running the script that contain the Citrix ADC user/pass, and the Citrix ADC IP</li>
 </ol>
