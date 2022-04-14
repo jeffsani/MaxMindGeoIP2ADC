@@ -54,6 +54,24 @@ else
    echo "Conversion tool already present - skipping download..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 fi
 
+# Check known_hosts file for presence of NSIP and add if not present
+ssh-keyscan -t rsa,dsa $CITRIX_ADC_IP 2>&1 | sort -u - ~/.ssh/known_hosts > ~/.ssh/tmp_hosts
+mv ~/.ssh/tmp_hosts ~/.ssh/known_hosts
+
+if [ $CITRIX_ADC_PORT -eq "22" ]; then
+   ssh-keygen -F $CITRIX_ADC_IP -f ~/.ssh/known_hosts &>/dev/null;
+   if [ "$?" -ne "0" ]; then 
+      # Add ADC to known_hosts
+      ssh-keyscan -H $CITRIX_ADC_IP >> ~/.ssh/known_hosts;
+   fi
+else 
+   ssh-keygen -F '[$CITRIX_ADC_IP]:$CITRIX_ADC_PORT' -f ~/.ssh/known_hosts &>/dev/null;
+   if [ "$?" -ne "0" ]; then 
+      # Add ADC to known_hosts
+      ssh-keyscan -p $CITRIX_ADC_PORT -H $CITRIX_ADC_IP >> ~/.ssh/known_hosts;
+   fi
+fi
+
 # Create cron job for scheduling the script to be run weekly on Wed at 1AM
 echo "Removing cronjob if exists..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 crontab -u $(whoami) -l | grep -v '/home/$(whoami)/maxmindgeolite2adc/geolite2adc.sh' | crontab -u  $(whoami) -

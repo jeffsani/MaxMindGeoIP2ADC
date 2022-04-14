@@ -88,26 +88,8 @@ if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
    fi
    # Unzip converted files
    echo "Preparing files for transfer to ADC..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
-   gunzip Citrix_Netscaler_InBuilt_GeoIP_DB*;
-   
-   # Check known_hosts file for presence of NSIP and add if not present
-   ssh-keyscan -t rsa,dsa $CITRIX_ADC_IP 2>&1 | sort -u - ~/.ssh/known_hosts > ~/.ssh/tmp_hosts
-   mv ~/.ssh/tmp_hosts ~/.ssh/known_hosts
-
-   if [ $CITRIX_ADC_PORT -eq "22" ]; then
-      ssh-keygen -F $CITRIX_ADC_IP -f ~/.ssh/known_hosts &>/dev/null;
-      if [ "$?" -ne "0" ]; then 
-         # Add ADC to known_hosts
-         ssh-keyscan -H $CITRIX_ADC_IP >> ~/.ssh/known_hosts;
-      fi
-   else 
-      ssh-keygen -F '[$CITRIX_ADC_IP]:$CITRIX_ADC_PORT' -f ~/.ssh/known_hosts &>/dev/null;
-      if [ "$?" -ne "0" ]; then 
-         # Add ADC to known_hosts
-         ssh-keyscan -p $CITRIX_ADC_PORT -H $CITRIX_ADC_IP >> ~/.ssh/known_hosts;
-      fi
-   fi
-   
+   gunzip Citrix_Netscaler_InBuilt_GeoIP_DB*;   
+ 
    # Transfer the files to the ADC
    echo "Transfering files to ADC..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    sshpass -p "$CITRIX_ADC_PASSWORD" scp -P $CITRIX_ADC_PORT Citrix_Netscaler_InBuilt_GeoIP_DB_IPv* $CITRIX_ADC_USER@$CITRIX_ADC_IP:$CITRIX_ADC_GEOIPDB_PATH;
