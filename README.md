@@ -13,7 +13,8 @@ According to the maxmind web site, the GeoIP Databases are updated each Tuesday 
 
 <ol type="1">
    <li>Login to your host as the user you want to create the script under</li>
-   <li>Complete steps 1-3 in the requirements</li>
+   <li>su to root or another priviledged account for the package install - i.e. su root /bin/bash
+   <li>Complete steps 2-4 in the requirements below for the Maxmind API access</li>
    <li>Clone the repo into the desired directory on your linux host:</li>
       <ul><li>git clone https://github.com/jeffsani/maxmindgeolite2adc.git <directory> (directory is optional)</li></ul>
    <li>cd to that directory</li>
@@ -24,10 +25,10 @@ According to the maxmind web site, the GeoIP Databases are updated each Tuesday 
 To implement this script you will need the following if you plan to implement manually and not use the init script:
 
 <ol type="1">
+   <li>A host or container to run this on</li>
    <li>A Geolite2 Account setup at https://www.maxmind.com/en/geolite2/signup?lang=en</li>
    <li>An API License Key - created post account setup (step 1)</li>
    <li>Permalinks to the Country and/or City Geo IP Databases in CSV format </li>
-   <li>A host or container to run this on</li>
    <li>Pacakages: unzip libwww-perl libmime-lite-perl libnet-ip-perl git unzip sshpass moreutils</li>
    <li>This conversion tool https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format</li>
    <li>Environment variables set for the user running the script that contain the Citrix ADC user/pass, and the Citrix ADC IP</li>
