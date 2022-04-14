@@ -13,7 +13,7 @@ According to the maxmind web site, the GeoIP Databases are updated each Tuesday 
 
 <ol type="1">
    <li>Login to your host as the user you want to create the script under</li>
-   <li>su to root or another priviledged account for the package install - i.e. su root /bin/bash
+   <li>su to root or another priviledged account for the package install - i.e. su root
    <li>Complete steps 2-4 in the requirements below for access to the Maxmind GeoLite2 IP databases</li>
    <li>Clone the repo into the desired directory on your linux host:</li>
       <ul><li>git clone https://github.com/jeffsani/maxmindgeolite2adc.git <directory> (directory is optional)</li></ul>
