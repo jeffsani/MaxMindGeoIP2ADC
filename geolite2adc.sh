@@ -25,8 +25,8 @@ echo "User $(whoami) started the script" | ts '[%H:%M:%S]' | tee -a $LOGFILE
 echo "Starting geolite2adc Log..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 
 # Check to see if one of the required environment variables for the script is not set
-if [[ -z "${LICENSE_KEY}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWORD}" || -z "${CITRIX_ADC_IP}" ]]; then
-    echo "One of the required environment variable for the script is not set properly..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+if [[ -z "${LICENSE_KEY}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWORD}" || -z "${CITRIX_ADC_IP}" || -z "${CITRIX_ADC_PORT}" ]]; then
+    echo "One or more of the required environment variables for the script is not set properly..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
     exit 1;
 fi
 
@@ -89,13 +89,32 @@ if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
    # Unzip converted files
    echo "Preparing files for transfer to ADC..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    gunzip Citrix_Netscaler_InBuilt_GeoIP_DB*;
+   
+   # Check known_hosts file for presence of NSIP and add if not present
+   ssh-keyscan -t rsa,dsa $CITRIX_ADC_IP 2>&1 | sort -u - ~/.ssh/known_hosts > ~/.ssh/tmp_hosts
+   mv ~/.ssh/tmp_hosts ~/.ssh/known_hosts
+
+   if [ $CITRIX_ADC_PORT -eq "22" ]; then
+      ssh-keygen -F $CITRIX_ADC_IP -f ~/.ssh/known_hosts &>/dev/null;
+      if [ "$?" -ne "0" ]; then 
+         # Add ADC to known_hosts
+         ssh-keyscan -H $CITRIX_ADC_IP >> ~/.ssh/known_hosts;
+      fi
+   else 
+      ssh-keygen -F '[$CITRIX_ADC_IP]:$CITRIX_ADC_PORT' -f ~/.ssh/known_hosts &>/dev/null;
+      if [ "$?" -ne "0" ]; then 
+         # Add ADC to known_hosts
+         ssh-keyscan -p $CITRIX_ADC_PORT -H $CITRIX_ADC_IP >> ~/.ssh/known_hosts;
+      fi
+   fi
+   
    # Transfer the files to the ADC
    echo "Transfering files to ADC..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
-   sshpass -p "$CITRIX_ADC_PASSWORD" scp Citrix_Netscaler_InBuilt_GeoIP_DB_IPv* $CITRIX_ADC_USER@$CITRIX_ADC_IP:$CITRIX_ADC_GEOIPDB_PATH;
+   sshpass -p "$CITRIX_ADC_PASSWORD" scp -P $CITRIX_ADC_PORT Citrix_Netscaler_InBuilt_GeoIP_DB_IPv* $CITRIX_ADC_USER@$CITRIX_ADC_IP:$CITRIX_ADC_GEOIPDB_PATH;
    echo "Adding IPv4 and IPv6 GeoIP location files to ADC configuration for use in GSLB and PI..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    # Add the location db files (benign if already present in config)
-   sshpass -p "$CITRIX_ADC_PASSWORD" ssh $CITRIX_ADC_USER@$CITRIX_ADC_IP "add locationFile /var/netscaler/inbuilt_db/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -format netscaler";
-   sshpass -p "$CITRIX_ADC_PASSWORD" ssh $CITRIX_ADC_USER@$CITRIX_ADC_IP "add locationFile6 /var/netscaler/inbuilt_db/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -format netscaler";
+   sshpass -p "$CITRIX_ADC_PASSWORD" ssh $CITRIX_ADC_USER@$CITRIX_ADC_IP -p $CITRIX_ADC_PORT "add locationFile /var/netscaler/inbuilt_db/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -format netscaler";
+   sshpass -p "$CITRIX_ADC_PASSWORD" ssh $CITRIX_ADC_USER@$CITRIX_ADC_IP -p $CITRIX_ADC_PORT "add locationFile6 /var/netscaler/inbuilt_db/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -format netscaler";
    # Save the ns.conf - this will also invoke the filesync process to synchronize the db files to ha peer nodes or cluster nodes (note - watchdog will also eventually do this)
    echo "Saving configuration and invoking filesync..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    sshpass -p "$CITRIX_ADC_PASSWORD" ssh $CITRIX_ADC_USER@$CITRIX_ADC_IP "save config"

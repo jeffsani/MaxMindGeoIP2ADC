@@ -22,6 +22,8 @@ echo "Enter the Citrix ADC user password:"
 read ADC_PASSWD
 echo "Enter your Citrix ADC NSIP:"
 read NSIP
+echo "Enter your Citrix ADC NSIP Port:"
+read NSIP_PORT
 
 
 if [[ -z "${LICENSE_KEY}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWORD}" || -z "${CITRIX_ADC_IP}" ]]; then
@@ -30,6 +32,7 @@ if [[ -z "${LICENSE_KEY}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWOR
    export CITRIX_ADC_USER="$ADC_USER"
    export CITRIX_ADC_PASSWORD="$ADC_PASSWD"
    export CITRIX_ADC_IP="$NSIP"
+   export CITRIX_ADC_PORT="$NSIP_PORT"
    #End-geolite2adc' >> ~/.bashrc;
    source ~/.bashrc;
    echo "Script variables set successfully..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
@@ -39,7 +42,7 @@ fi
 
 # Download and install pre-requisites
 echo "Installing required system pre-requisites..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-which yum >/dev/null && {sudo yum install unzip perl-libwww-perl perl-MIME-lite perl-Net-IP sshpass more-utils;}
+which yum >/dev/null && {sudo yum install unzip perl-libwww-perl perl-MIME-Lite perl-Net-IP perl-Time-Piece sshpass more-utils;}
 which apt-get >/dev/null && {sudo apt install unzip libwww-perl libmime-lite-perl libnet-ip-perl sshpass moreutils; }
 
 # Download NetScaler format conversion script in to same directory
