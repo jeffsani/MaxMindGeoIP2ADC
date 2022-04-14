@@ -16,7 +16,7 @@ According to the maxmind web site, the GeoIP Databases are updated each Tuesday 
    <li>Login to your host as the user you want to create the script under</li>
    <li>Complete steps 1-3 in the requirements</li>
    <li>Clone the repo into the desired directory on your linux host:</li>
-      <ol><li>git clone https://github.com/jeffsani/maxmindgeolite2adc.git <directory> (directory is optional)</li></ol>
+      <ul><li>git clone https://github.com/jeffsani/maxmindgeolite2adc.git <directory> (directory is optional)</li></ul>
    <li>cd to that directory</li>
    <li>Run the geolite2adc-init.sh script</li>
 </ol>
@@ -41,8 +41,10 @@ To implement this script you will need the following if you plan to implement ma
 
 <strong>Required Environment Variables:</strong></br>
 
-LICENSE_KEY=XXXX
-CITRIX_ADC_USER=XXX
-CITRIX_ADC_PASSWORD=XXX
-CITRIX_ADC_IP=X.X.X.X
-CITRIX_ADC_PORT=NNN
+<ul>
+   <li>LICENSE_KEY=XXXX
+   <li>CITRIX_ADC_USER=XXX
+   <li>CITRIX_ADC_PASSWORD=XXX
+   <li>CITRIX_ADC_IP=X.X.X.X
+   <li>CITRIX_ADC_PORT=NNN
+</ul>
