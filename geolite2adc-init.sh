@@ -63,13 +63,13 @@ if [ $CITRIX_ADC_PORT -eq "22" ]; then
    ssh-keygen -F $CITRIX_ADC_IP -f ~/.ssh/known_hosts &>/dev/null;
    if [ "$?" -ne "0" ]; then 
       # Add ADC to known_hosts
-      ssh-keyscan -H $CITRIX_ADC_IP >> ~/.ssh/known_hosts;
+      ssh-keyscan $CITRIX_ADC_IP >> ~/.ssh/known_hosts;
    fi
 else 
    ssh-keygen -F '[$CITRIX_ADC_IP]:$CITRIX_ADC_PORT' -f ~/.ssh/known_hosts &>/dev/null;
    if [ "$?" -ne "0" ]; then 
       # Add ADC to known_hosts
-      ssh-keyscan -p $CITRIX_ADC_PORT -H $CITRIX_ADC_IP >> ~/.ssh/known_hosts;
+      ssh-keyscan -p $CITRIX_ADC_PORT $CITRIX_ADC_IP >> ~/.ssh/known_hosts;
    fi
 fi
 
