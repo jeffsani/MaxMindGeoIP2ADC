@@ -26,17 +26,17 @@ echo "Enter your Citrix ADC NSIP Port:"
 read NSIP_PORT
 
 if [[ -z "${LICENSE_KEY}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWORD}" || -z "${CITRIX_ADC_IP}" || -z "${CITRIX_ADC_PORT}" ]]; then
-   cat >>~/.bashrc <<EOF
-   #Start-geolite2adc
-   export LICENSE_KEY="$LICENSE"
-   export CITRIX_ADC_USER="$ADC_USER"
-   export CITRIX_ADC_PASSWORD="$ADC_PASSWD"
-   export CITRIX_ADC_IP="$NSIP"
-   export CITRIX_ADC_PORT="$NSIP_PORT"
-   #End-geolite2adc
+cat >>~/.bashrc <<-EOF
+#Start-geolite2adc
+export LICENSE_KEY="$LICENSE"
+export CITRIX_ADC_USER="$ADC_USER"
+export CITRIX_ADC_PASSWORD="$ADC_PASSWD"
+export CITRIX_ADC_IP="$NSIP"
+export CITRIX_ADC_PORT="$NSIP_PORT"
+#End-geolite2adc
 EOF
-   source ~/.bashrc;
-   echo "Script variables set successfully..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+source ~/.bashrc;
+echo "Script variables set successfully..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
 else
    sed -i -e 's/LICENSE_KEY=.*/LICENSE_KEY=$LICENSE/' -e 's/CITRIX_ADC_USER=.*/CITRIX_ADC_USER=$ADC_USER/' -e 's/CITRIX_ADC_PASSWORD=.*/CITRIX_ADC_PASSWORD=$ADC_PASSWD/' -e 's/CITRIX_ADC_IP=.*/CITRIX_ADC_IP=$NSIP/' ~/.bashrc
 fi
