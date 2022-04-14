@@ -78,4 +78,3 @@ crontab -l > geolite2adc
 echo "0 1 * * 3 $(pwd)/geolite2adc.sh" >> geolite2adc
 crontab geolite2adc
 rm geolite2adc
-
