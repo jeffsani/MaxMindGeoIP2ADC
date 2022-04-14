@@ -31,9 +31,11 @@ To implement this script you will need the following if you plan to implement ma
 6. Environment variables set for the user running the script that contain the Citrix ADC user/pass, and the Citrix ADC IP
 
 <strong>Required Packages (for Host):</strong></br>
+
 - unzip libwww-perl libmime-lite-perl libnet-ip-perl git unzip sshpass moreutils
 
 <strong>Required Environment Variables:</strong></br>
+
 LICENSE_KEY=XXXX
 CITRIX_ADC_USER=XXX
 CITRIX_ADC_PASSWORD=XXX
