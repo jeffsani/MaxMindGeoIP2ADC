@@ -19,7 +19,6 @@ According to the maxmind web site, the GeoIP Databases are updated each Tuesday 
    <li>cd to that directory</li>
    <li>Run the geolite2adc-init.sh script</li>
 </ol>
-
  
 <strong>Script Requirements:</strong></br>
 To implement this script you will need the following if you plan to implement manually and not use the init script:
@@ -29,13 +28,10 @@ To implement this script you will need the following if you plan to implement ma
    <li>An API License Key - created post account setup (step 1)</li>
    <li>Permalinks to the Country and/or City Geo IP Databases in CSV format </li>
    <li>A host or container to run this on</li>
+   <li>Pacakages: unzip libwww-perl libmime-lite-perl libnet-ip-perl git unzip sshpass moreutils</li>
    <li>This conversion tool https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format</li>
    <li>Environment variables set for the user running the script that contain the Citrix ADC user/pass, and the Citrix ADC IP</li>
 </ol>
-
-<strong>Required Packages (for Host):</strong></br>
-
-<ul> <li>unzip libwww-perl libmime-lite-perl libnet-ip-perl git unzip sshpass moreutils</li></ul>
 
 <strong>Required Environment Variables:</strong></br>
 
