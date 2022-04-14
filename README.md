@@ -13,24 +13,27 @@ According to the maxmind web site, the GeoIP Databases are updated each Tuesday 
 <strong>Automated Setup Steps (For Linux Host):</strong></br>
 
 <ol type="1">
-    <li>Login to your host as the user you want to create the script under</li>
-    <li>Complete steps 1-3 in the requirements</li>
-    <li>Clone the repo into the desired directory on your linux host:</li>
-       <ol><li>git clone https://github.com/jeffsani/maxmindgeolite2adc.git <directory> (directory is optional)</li></ol>
-    <li>cd to that directory</li>
-    <li>Run the geolite2adc-init.sh script</li>
+   <li>Login to your host as the user you want to create the script under</li>
+   <li>Complete steps 1-3 in the requirements</li>
+   <li>Clone the repo into the desired directory on your linux host:</li>
+      <ol><li>git clone https://github.com/jeffsani/maxmindgeolite2adc.git <directory> (directory is optional)</li></ol>
+   <li>cd to that directory</li>
+   <li>Run the geolite2adc-init.sh script</li>
 </ol>
 
  
 <strong>Script Requirements:</strong></br>
+
 To implement this script you will need the following if you plan to implement manually and not use the init script:
 
-1. A Geolite2 Account setup at https://www.maxmind.com/en/geolite2/signup?lang=en
-2. An API License Key - created post account setup (step 1)
-3. Permalinks to the Country and/or City Geo IP Databases in CSV format 
-4. A host or container to run this on
-5. This conversion tool https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format
-6. Environment variables set for the user running the script that contain the Citrix ADC user/pass, and the Citrix ADC IP
+<ol type="1">
+   <li>A Geolite2 Account setup at https://www.maxmind.com/en/geolite2/signup?lang=en</li>
+   <li>An API License Key - created post account setup (step 1)</li>
+   <li>Permalinks to the Country and/or City Geo IP Databases in CSV format </li>
+   <li>A host or container to run this on</li>
+   <li>This conversion tool https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format</li>
+   <li>Environment variables set for the user running the script that contain the Citrix ADC user/pass, and the Citrix ADC IP</li>
+</ol>
 
 <strong>Required Packages (for Host):</strong></br>
 
