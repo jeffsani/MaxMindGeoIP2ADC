@@ -78,9 +78,8 @@ fi
 
 # Create cron job for scheduling the script to be run weekly on Wed at 1AM
 echo "Removing cronjob if exists..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-crontab -u $(whoami) -l | grep -v '/home/$(whoami)/maxmindgeolite2adc/geolite2adc.sh' | crontab -u  $(whoami) -
+crontab -l | grep -v "geolite2adc.sh" | crontab -
 echo "creating cron job to schedule script..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-crontab -l > geolite2adc
 echo "0 1 * * 3 $(pwd)/geolite2adc.sh" >> geolite2adc
 crontab geolite2adc
 rm geolite2adc
