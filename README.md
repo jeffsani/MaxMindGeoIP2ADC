@@ -33,8 +33,8 @@ To implement this script you will need the following if you plan to implement ma
    <li>Permalinks to the Country and/or City Geo IP Databases in CSV format </li>
    <li>Required Packages:</li>
        <ul>
-          <li>Ubuntu: curl unzip libwww-perl libmime-lite-perl libnet-ip-perl git unzip libtime-piece-perl sshpass moreutils</li>
-          <li>CentOS/Fedora: curl unzip perl-libwww-perl perl-MIME-Lite perl-Net-IP perl-Time-Piece sshpass more-utils</li>
+          <li>Ubuntu: curl unzip libwww-perl libmime-lite-perl libnet-ip-perl git sshpass moreutils</li>
+          <li>CentOS/Fedora: curl unzip perl-libwww-perl perl-MIME-Lite perl-Net-IP perl-Time-Piece git sshpass more-utils</li>
        </ul>
    <li>This conversion tool https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format</li>
    <li>Environment variables set for the user running the script that contain the Citrix ADC user/pass, and the Citrix ADC IP/Port as per below</li>
