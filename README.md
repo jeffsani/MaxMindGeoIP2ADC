@@ -3,6 +3,7 @@
 Initial version: 1.0
 Date: 3/29/2022
 Author: Jeff Sani
+Contributors: Matt Drown, Chuck Cox
 
 <strong>Description:</strong></br>
 This script will automate the refresh of the Citrix ADC (NetScaler) InBuilt MaxMind GeoLite2 Location Database files Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 and Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 which are used with Static Proximity GSLB and Policy Expressions that reference a Location.  See https://docs.citrix.com/en-us/citrix-adc/current-release/global-server-load-balancing/configuring-static-proximity.html for more information about GSLB Static Proximity.  The main benefit of this script is to refresh these location files with up-to-date versions as these are not updated via on-box automation or new firmware installs.  The script will run weekly, download the maxmind free Geolite2 City or Country DB (CSV Format) if it has been refreshed, perform a checksum on the file to verify file integrity, convert it to the required NetScaler location db format, and upload the new files to the requisite directory where the InBuilt files are located. The InBuilt files will get automatically synchronized across HA pair or Cluster nodes.
@@ -51,11 +52,9 @@ To implement this script you will need the following if you plan to implement ma
 </ul>
 
 <strong>ADC Service Account and Command Policy</strong></br>
-It is optional but recommended to create a service account on ADC to use for the purposes of running this script in lieu of just using nsroot.  
+It is optional but recommended to create a service account on ADC to use for the purposes of running this script in lieu of just using nsroot:  
 
-<code>
-add system cmdPolicy geolite2adc_cmd_pol ALLOW "(^add\\s+(locationFile|locationFile6))|(^add\\s+(locationFile|locationFile6)\\s+.*)|"</br>
-add system user geolite2adc -timeout 900 -maxsession 2 -allowedManagementInterface CLI</br>
-set system user geolite2adc -password [password] </br>
-bind system user geolite2adc geolite2adc_cmd_pol 100 </br>
-</code>
+<code>add system cmdPolicy geolite2adc_cmd_pol ALLOW "(^add\\s+(locationFile|locationFile6))|(^add\\s+(locationFile|locationFile6)\\s+.*)|"</code></br>
+<code>add system user geolite2adc -timeout 900 -maxsession 2 -allowedManagementInterface CLI</code></br>
+<code>set system user geolite2adc -password [password]</code></br>
+<code>bind system user geolite2adc geolite2adc_cmd_pol 100</code>
