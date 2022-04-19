@@ -76,18 +76,12 @@ else
    fi
 fi
 
-# Create cron job for scheduling the script to be run weekly on Wed at 1AM
-echo "Removing geolite2adc cronjob if exists..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+# Create cron jobs for scheduling the script to be run weekly on Wed at 1AM and monthly log cleanup
+echo "Removing existing cronjob if exists..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 crontab -l | grep -v "geolite2adc.sh" | crontab -
-echo "Creating cron job to schedule main script..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+crontab -l | grep -v "geolite2adc-cleanup.sh" | crontab -
+echo "Creating new cron jobs..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 echo "0 1 * * 3 $(pwd)/geolite2adc.sh" >> geolite2adc
+echo "0 2 15 * * $(pwd)/geolite2adc-cleanup.sh" >> geolite2adc
 crontab geolite2adc
 rm geolite2adc
-
-# Create cron job for removing old logfiles
-echo "Removing geolite2adc-cleanup cronjob if exists..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-crontab -l | grep -v "geolite2adc-cleanup.sh" | crontab -
-echo "Creating cron job to schedule cleanup script..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-echo "0 2 15 * * $(pwd)/geolite2adc-cleanup.sh" >> geolite2adc-cleanup
-crontab geolite2adc-cleanup
-rm geolite2adc-cleanup
