@@ -43,8 +43,8 @@ fi
 
 # Download and install pre-requisites
 echo "Installing required system pre-requisites..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-which yum >/dev/null && { yum install unzip perl-libwww-perl perl-MIME-Lite perl-Net-IP perl-Time-Piece sshpass more-utils; }
-which apt-get >/dev/null && { apt install unzip libwww-perl libmime-lite-perl libnet-ip-perl libtime-piece-perl sshpass moreutils; }
+which yum >/dev/null && { yum install curl unzip perl-libwww-perl perl-MIME-Lite perl-Net-IP perl-Time-Piece sshpass more-utils; }
+which apt-get >/dev/null && { apt install curl unzip libwww-perl libmime-lite-perl libnet-ip-perl libtime-piece-perl sshpass moreutils; }
 
 # Download NetScaler format conversion script in to same directory
 echo "Checking for MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format repo..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
@@ -77,9 +77,17 @@ else
 fi
 
 # Create cron job for scheduling the script to be run weekly on Wed at 1AM
-echo "Removing cronjob if exists..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+echo "Removing geolite2adc cronjob if exists..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 crontab -l | grep -v "geolite2adc.sh" | crontab -
-echo "creating cron job to schedule script..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+echo "Creating cron job to schedule main script..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 echo "0 1 * * 3 $(pwd)/geolite2adc.sh" >> geolite2adc
 crontab geolite2adc
 rm geolite2adc
+
+# Create cron job for removing old logfiles
+echo "Removing geolite2adc-cleanup cronjob if exists..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+crontab -l | grep -v "geolite2adc-cleanup" | crontab -
+echo "Creating cron job to schedule cleanup script..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+echo "0 2 15 * * $(pwd)/geolite2adc-cleanup.sh" >> geolite2adc-cleanup
+crontab geolite2adc-cleanup
+rm geolite2adc-cleanup

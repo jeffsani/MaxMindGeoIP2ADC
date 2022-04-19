@@ -32,8 +32,8 @@ To implement this script you will need the following if you plan to implement ma
    <li>Permalinks to the Country and/or City Geo IP Databases in CSV format </li>
    <li>Required Packages:</li>
        <ul>
-          <li>Ubuntu: unzip libwww-perl libmime-lite-perl libnet-ip-perl git unzip sshpass moreutils</li>
-          <li>CentOS/Fedora: unzip perl-libwww-perl perl-MIME-Lite perl-Net-IP perl-Time-Piece sshpass more-utils</li>
+          <li>Ubuntu: curl unzip libwww-perl libmime-lite-perl libnet-ip-perl git unzip libtime-piece-perl sshpass moreutils</li>
+          <li>CentOS/Fedora: curl unzip perl-libwww-perl perl-MIME-Lite perl-Net-IP perl-Time-Piece sshpass more-utils</li>
        </ul>
    <li>This conversion tool https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format</li>
    <li>Environment variables set for the user running the script that contain the Citrix ADC user/pass, and the Citrix ADC IP/Port as per below</li>
@@ -49,3 +49,13 @@ To implement this script you will need the following if you plan to implement ma
    <li>CITRIX_ADC_IP=X.X.X.X
    <li>CITRIX_ADC_PORT=NNN
 </ul>
+
+<strong>ADC Service Account and Command Policy</strong></br>
+It is optional but recommended to create a service account on ADC to use for the purposes of running this script in lieu of just using nsroot.  
+
+<code>
+add system cmdPolicy geolite2adc_cmd_pol ALLOW "(^add\\s+(locationFile|locationFile6))|(^add\\s+(locationFile|locationFile6)\\s+.*)|"</br>
+add system user geolite2adc -timeout 900 -maxsession 2 -allowedManagementInterface CLI</br>
+set system user geolite2adc -password [password] </br>
+bind system user geolite2adc geolite2adc_cmd_pol 100 </br>
+</code>
