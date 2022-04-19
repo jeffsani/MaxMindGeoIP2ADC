@@ -99,7 +99,7 @@ if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
    sshpass -p "$CITRIX_ADC_PASSWORD" ssh $CITRIX_ADC_USER@$CITRIX_ADC_IP -p $CITRIX_ADC_PORT "add locationFile6 /var/netscaler/inbuilt_db/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -format netscaler";
    # Save the ns.conf - this will also invoke the filesync process to synchronize the db files to ha peer nodes or cluster nodes (note - watchdog will also eventually do this)
    echo "Saving configuration and invoking filesync..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
-   sshpass -p "$CITRIX_ADC_PASSWORD" ssh $CITRIX_ADC_USER@$CITRIX_ADC_IP "save config"
+   sshpass -p "$CITRIX_ADC_PASSWORD" ssh $CITRIX_ADC_USER@$CITRIX_ADC_IP -p $CITRIX_ADC_PORT "save config"
 else
   echo "The checksum failed.  File is corrupt or tampered with in transit..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
   do_cleanup;

@@ -44,7 +44,7 @@ fi
 # Download and install pre-requisites
 echo "Installing required system pre-requisites..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 which yum >/dev/null && { yum install unzip perl-libwww-perl perl-MIME-Lite perl-Net-IP perl-Time-Piece sshpass more-utils; }
-which apt-get >/dev/null && { apt install unzip libwww-perl libmime-lite-perl libnet-ip-perl sshpass moreutils; }
+which apt-get >/dev/null && { apt install unzip libwww-perl libmime-lite-perl libnet-ip-perl libtime-piece-perl sshpass moreutils; }
 
 # Download NetScaler format conversion script in to same directory
 echo "Checking for MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format repo..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
