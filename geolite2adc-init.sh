@@ -86,7 +86,7 @@ rm geolite2adc
 
 # Create cron job for removing old logfiles
 echo "Removing geolite2adc-cleanup cronjob if exists..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-crontab -l | grep -v "geolite2adc-cleanup" | crontab -
+crontab -l | grep -v "geolite2adc-cleanup.sh" | crontab -
 echo "Creating cron job to schedule cleanup script..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 echo "0 2 15 * * $(pwd)/geolite2adc-cleanup.sh" >> geolite2adc-cleanup
 crontab geolite2adc-cleanup
