@@ -50,7 +50,7 @@ which apt-get >/dev/null && { apt install curl unzip libwww-perl libmime-lite-pe
 echo "Checking for MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format repo..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 if [[ ! -e "./Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl" ]]; then
    echo "Conversion tool not present - downloading from github..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-   curl -s -O -J https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format/blob/master/Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl
+   curl -s -O -J https://raw.githubusercontent.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format/master/Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl
 else
    echo "Conversion tool already present - skipping download..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 fi
