@@ -25,7 +25,7 @@ read NSIP
 echo "Enter your Citrix ADC NSIP Port:"
 read NSIP_PORT
 
-if [[ -z "${LICENSE_KEY}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWORD}" || -z "${CITRIX_ADC_IP}" || -z "${CITRIX_ADC_PORT}" ]]; then
+if [[ grep --quiet #Start-geolite2adc ~/.bashrc ]]; then
 cat >>~/.bashrc <<-EOF
 #Start-geolite2adc
 export LICENSE_KEY="$LICENSE"
