@@ -107,5 +107,6 @@ else
   exit 1;
 fi
 
-#do_cleanup
+do_cleanup
+echo "All done..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
 exit 0
