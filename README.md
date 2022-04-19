@@ -53,6 +53,7 @@ The following variables and their respective values are required at script runti
 </ul>
 
 <strong>ADC Service Account and Command Policy</strong></br>
+
 It is optional but recommended to create a service account on ADC to use for the purposes of running this script in lieu of just using nsroot:  
 
 <code>add system cmdPolicy geolite2adc_cmd_pol ALLOW "(^add\\s+(locationFile|locationFile6))|(^add\\s+(locationFile|locationFile6)\\s+.*)|"</code></br>
