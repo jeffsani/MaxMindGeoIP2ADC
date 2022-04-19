@@ -85,3 +85,5 @@ echo "0 1 * * 3 $(pwd)/geolite2adc.sh" >> geolite2adc
 echo "0 2 15 * * $(pwd)/geolite2adc-cleanup.sh" >> geolite2adc
 crontab geolite2adc
 rm geolite2adc
+
+echo "All done!..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
