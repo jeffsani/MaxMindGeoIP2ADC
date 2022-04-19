@@ -79,7 +79,7 @@ if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
    echo "Unzipped $GEOIPDB_FILE..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    #Run the Citrix tool to convert the geoip files to NetScaler format
    if [ -f "$CONVERSION_TOOL" ]; then
-      echo "Running the Citrix conversion tool to convert the geoip db files to NetScale format..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+      echo "Running the Citrix conversion tool to convert the geoip db files to NetScaler format..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
       perl $CONVERSION_TOOL -b GeoLite2-$DBTYPE-Blocks-IPv4.csv -i GeoLite2-$DBTYPE-Blocks-IPv6.csv -l  GeoLite2-$DBTYPE-Locations-$LANGUAGE.csv -o Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -p Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -logfile $LOGFILE;
       echo "Successfully converted MaxMind GeoLite2 IP Database files to NetScaler format..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    else 
