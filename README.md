@@ -57,7 +57,7 @@ The following variables and their respective values are required at script runti
 
 It is optional but recommended to create a service account on ADC to use for the purposes of running this script in lieu of just using nsroot:  
 
-<code>add system cmdPolicy geolite2adc_cmd_pol ALLOW "(^add\\s+(locationFile|locationFile6))|(^add\\s+(locationFile|locationFile6)\\s+.*)|"</code></br>
+<code>add system cmdPolicy geolite2adc_cmdpol ALLOW "(^add\\s+(locationFile|locationFile6))|(^add\\s+(locationFile|locationFile6)\\s+.*)|^(scp).*/var/netscaler/inbuilt_db*"</code></br>
 <code>add system user geolite2adc -timeout 900 -maxsession 2 -allowedManagementInterface CLI</code></br>
-<code>set system user geolite2adc -password [password]</code></br>
-<code>bind system user geolite2adc geolite2adc_cmd_pol 100</code>
+<code>set system user geolite2adc -password XXXXXX</code></br>
+<code>bind system user geolite2adc geolite2adc_cmdpol 100</code>
