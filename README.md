@@ -29,15 +29,15 @@ To implement this script you will need the following if you plan to implement ma
 
 <ol type="1">
    <li>A host or container to run this on</li>
-   <li>A Geolite2 Account setup at https://www.maxmind.com/en/geolite2/signup?lang=en</li>
-   <li>An API License Key - created post account setup (step 1)</li>
-   <li>Permalinks to the Country and/or City Geo IP Databases in CSV format </li>
+   <li>A <a href="https://www.maxmind.com/en/geolite2/signup?lang=en">Geolite2</a> account</li>
+   <li>An API License Key - created post account setup in the maxmind portal</li>
+   <li>Permalinks to the Country and/or City Geo IP Databases in CSV format</li>
    <li>Required Packages:</li>
        <ul>
           <li>Ubuntu: curl unzip libwww-perl libmime-lite-perl libnet-ip-perl git sshpass moreutils</li>
           <li>CentOS/Fedora: curl unzip perl-libwww-perl perl-MIME-Lite perl-Net-IP perl-Time-Piece git sshpass more-utils</li>
        </ul>
-   <li>This conversion tool https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format</li>
+   <li>The <a href ="https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format">Citrix ADC GSLB GeoIP Conversion Tool</a></li>
    <li>Environment variables set for the user running the script that contain the Citrix ADC user/pass, and the Citrix ADC IP/Port as per below</li>
    <li>cron job to schedule the script to run every Wed morning to check for IP DB updates</li>
 </ol>
