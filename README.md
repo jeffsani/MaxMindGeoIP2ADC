@@ -31,8 +31,8 @@ To implement this script you will need the following if you plan to implement ma
    <li>A host or container to run this on</li>
    <li>A <a href="https://www.maxmind.com/en/geolite2/signup?lang=en">Geolite2</a> account</li>
    <li>An API License Key - created post account setup in the maxmind portal</li>
-   <li>Permalinks to the Country and/or City Geo IP Databases in CSV format</li>
-   <li>Required Packages:</li>
+   <li>Permalinks to the Country and/or City Geo IP Databases in CSV format - obtained on the downloads page within your account</li>
+   <li>Required Linux Packages:</li>
        <ul>
           <li>Ubuntu: curl unzip libwww-perl libmime-lite-perl libnet-ip-perl git sshpass moreutils</li>
           <li>CentOS/Fedora: curl unzip perl-libwww-perl perl-MIME-Lite perl-Net-IP perl-Time-Piece git sshpass more-utils</li>
