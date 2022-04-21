@@ -25,7 +25,6 @@ For more information about the Maxmind Geolite2 Free Geolocation databases and t
  
 <strong>Script Requirements</strong></br>
 To implement this script you will need the following if you plan to implement manually and not use the init script:
-
 <ol type="1">
    <li>A host or container to run this on</li>
    <li>A <a href="https://www.maxmind.com/en/geolite2/signup?lang=en">Geolite2</a> account</li>
