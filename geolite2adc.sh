@@ -16,6 +16,8 @@ CITRIX_ADC_GEOIPDB_PATH="/var/netscaler/inbuilt_db"
 function do_cleanup {
 echo "Cleaning up disposable files..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
 rm -f *.csv* *.txt *.zip* Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6
+echo "searching for old logs > 30 days and removing them..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+find *.log -type f -not -name '*maxmindgeolite2adc-init.log' -mtime -30 -delete
 }
 
 # Initiate Log

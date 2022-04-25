@@ -77,13 +77,11 @@ else
    fi
 fi
 
-# Create cron jobs for scheduling the script to be run weekly on Wed at 1AM and monthly log cleanup
-echo "Removing existing cronjob if exists..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+# Create cron job for scheduling the script to be run weekly on Wed at 1AM
+echo "Removing old cronjob if it exists..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 crontab -l | grep -v "geolite2adc.sh" | crontab -
-crontab -l | grep -v "geolite2adc-cleanup.sh" | crontab -
-echo "Creating new cron jobs..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+echo "Creating new cron job..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 echo "0 1 * * 3 $(pwd)/geolite2adc.sh" >> geolite2adc
-echo "0 2 15 * * $(pwd)/geolite2adc-cleanup.sh" >> geolite2adc
 crontab geolite2adc
 rm geolite2adc
 
