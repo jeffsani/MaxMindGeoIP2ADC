@@ -25,6 +25,7 @@ echo "User $(whoami) started the script" | ts '[%H:%M:%S]' | tee -a $LOGFILE
 echo "Starting MaxMindGeoIP2ADC Log..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 
 # Check to see if one of the required environment variables for the script is not set
+source ~/.bashrc
 if [[ -z "${LICENSE_KEY}" || -z "${EDITION}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWORD}" || -z "${CITRIX_ADC_IP}" || -z "${CITRIX_ADC_PORT}" ]]; then
     echo "One or more of the required environment variables for the script is not set properly..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
     exit 1;
