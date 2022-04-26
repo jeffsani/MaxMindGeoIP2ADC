@@ -8,7 +8,7 @@ set -o pipefail
 # Local Variables
 DBTYPE="City" #Choose Country or City
 LANGUAGE="en" #Choose en, de, fr, es, jp, pt-BR, ru, or zh"
-LOGFILE="$(date '+%m%d%Y')-MaxMindGeoIP2ADC.log"
+LOGFILE="$(date '+%m%d%Y')-mmmgeoip2adc.log"
 CONVERSION_TOOL="Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl"
 CITRIX_ADC_GEOIPDB_PATH="/var/netscaler/inbuilt_db"
 
@@ -17,7 +17,7 @@ function do_cleanup {
 echo "Cleaning up disposable files..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
 rm -f *.csv* *.txt *.zip* Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6
 echo "Searching for old logs > 30 days and removing them..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
-find *.log -type f -not -name '*MaxMind$(EDITION)ADC-Init.log' -mtime -30 -delete
+find *.log -type f -not -name '*mmmgeoip2adc-init.log' -mtime -30 -delete
 }
 
 # Initiate Log
@@ -52,21 +52,21 @@ esac
 
 # Check to see if DB has been updated within the last 2 days
 LAST_MODIFIED="$(curl -s -I "$GEOIPDB_URL" | grep -Fi Last-Modified: | awk {'print $3,$4,$5,$6'})"
-echo "MaxMind $(EDITION) IP Database last modified: $LAST_MODIFIED" | ts '[%H:%M:%S]' | tee -a $LOGFILE
+echo "MaxMind $EDITION IP Database last modified: $LAST_MODIFIED" | ts '[%H:%M:%S]' | tee -a $LOGFILE
 NOW=$(date | awk {'print $2,$3,$4,$5'})
 let DIFF=($(date +%s -d "$NOW")-$(date +%s -d "$LAST_MODIFIED"))/86400
 if [[ $DIFF -le 2 ]]; then #proceed with download of file
-  echo "MaxMind $(EDITION) IP Database was updated $DIFF days ago, commencing with downlaod..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+  echo "MaxMind $EDITION IP Database was updated $DIFF days ago, commencing with downlaod..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
   # Download the file
   echo "Downloading $GEOIPDB_URL...";
   GEOIPDB_FILE=$(curl -s -O -J -w '%{filename_effective}' "$GEOIPDB_URL" | awk {'print $1'});
   #echo "GeoIP DB File: $GEOIPDB_FILE";
   GEOIPDB_CHECKSUM_FILE=$(curl -s -O -J -w '%{filename_effective}' "$GEOIPDB_CHECKSUM" | awk {'print $1'});
   #echo "GeoIP DB Checksum File: $GEOIPDB_CHECKSUM_FILE";
-  echo "The  MaxMind $(EDITION) IP Database and checksum files for $DBTYPE successfully downloaded..."  | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+  echo "The  MaxMind $EDITION IP Database and checksum files for $DBTYPE successfully downloaded..."  | ts '[%H:%M:%S]' | tee -a $LOGFILE;
 else
   # Exit if file has not been updated
-  echo "The MaxMind $(EDITION) IP Database file has not been updated.  Exiting..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+  echo "The MaxMind $EDITION IP Database file has not been updated.  Exiting..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
   exit;
 fi
 
@@ -74,15 +74,15 @@ fi
 echo "Comparing sha256 checksum to verify file integrity before preoceeding..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
 CHECKSUM=$(sha256sum -c $GEOIPDB_CHECKSUM_FILE | awk {'print $2'}) 
 if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
-   echo "The MaxMind $(EDITION) Database file checksum is verified. Unpacking archive for conversion..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+   echo "The MaxMind $EDITION Database file checksum is verified. Unpacking archive for conversion..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    # Unzip the MaxMind IP DB
    unzip -q -j $GEOIPDB_FILE;
    echo "Unzipped $GEOIPDB_FILE..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    #Run the Citrix tool to convert the geoip files to NetScaler format
    if [ -f "$CONVERSION_TOOL" ]; then
       echo "Running the Citrix conversion tool to convert the geoip db files to NetScaler format..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
-      perl $CONVERSION_TOOL -b $(EDITION)-$DBTYPE-Blocks-IPv4.csv -i $(EDITION)-$DBTYPE-Blocks-IPv6.csv -l  $(EDITION)-$DBTYPE-Locations-$LANGUAGE.csv -o Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -p Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -logfile $LOGFILE;
-      echo "Successfully converted MaxMind $(EDITION) IP Database files to NetScaler format..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+      perl $CONVERSION_TOOL -b $EDITION-$DBTYPE-Blocks-IPv4.csv -i $EDITION-$DBTYPE-Blocks-IPv6.csv -l  $EDITION-$DBTYPE-Locations-$LANGUAGE.csv -o Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -p Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -logfile $LOGFILE;
+      echo "Successfully converted MaxMind $EDITION IP Database files to NetScaler format..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
    else 
       echo "The Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl was not present, please refer to the README.md for the script requirements - Exiting..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
       do_cleanup;
