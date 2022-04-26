@@ -34,7 +34,7 @@ else
 cat >>~/.bashrc <<-EOF
 #Start-mmgeoip2adc
 export LICENSE_KEY="$LICENSE"
-export EDITION="$MMEDITION"
+export EDITION="$LICENSE_EDITION"
 export CITRIX_ADC_USER="$ADC_USER"
 export CITRIX_ADC_PASSWORD="$ADC_PASSWD"
 export CITRIX_ADC_IP="$NSIP"
