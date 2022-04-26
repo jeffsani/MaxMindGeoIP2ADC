@@ -5,6 +5,7 @@ Date: 4/19/2022</br>
 Author: Jeff Sani</br>
 Contributors: Matt Drown, Chuck Cox</br>
 
+<img src="mmgeoip2adc.png" style="display:block; margin-left: auto; margin-right: auto;">
 <strong>Description</strong></br>
 Accurate IP location information is important if you are using this as a factor for device posture or for geofencing applications and APIs.  This script will automate the refresh of the Citrix ADC (NetScaler) InBuilt MaxMind Location Database files Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 and Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 which are used with Static Proximity GSLB and Policy Expressions that reference a Location.  See <a href="https://docs.citrix.com/en-us/citrix-adc/current-release/global-server-load-balancing/configuring-static-proximity.html">Citrix GSLB Documentation</a> for more information about GSLB Static Proximity.  The main benefit of this script is to keep the location files up-to-date as these are not updated via on-box automation or new firmware installs.  This script will run weekly, download the MaxMind City or Country DB (CSV Format) if it has been refreshed, perform a checksum on the file to verify file integrity, convert it to the required NetScaler location db format, and upload the new files to the requisite directory where the InBuilt files are located. The InBuilt files will get automatically synchronized across HA pair or Cluster nodes.
 
