@@ -36,7 +36,7 @@ To implement this script you will need the following if you plan to implement ma
        </ul>
    <li>The <a href ="https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format">Citrix ADC GSLB GeoIP Conversion Tool</a></li>
    <li>Environment variables set for the user running the script that contain the Citrix ADC user/pass, and the Citrix ADC IP/Port as per below</li>
-   <li>cron job to schedule the script to run every Wed morning to check for IP DB updates</li>
+   <li>cron job to schedule the script to check for IP DB updates</li>
 </ol>
 
 <strong>Required Environment Variables</strong></br>
