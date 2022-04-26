@@ -7,7 +7,6 @@ set -o pipefail
 
 # Local Variables
 DBTYPE="City" #Choose Country or City
-EDITION="GeoLite2" #Choose GeoLite2 for free edition or GeoIP2 for Enterprise edition
 LANGUAGE="en" #Choose en, de, fr, es, jp, pt-BR, ru, or zh"
 LOGFILE="$(date '+%m%d%Y')-MaxMindGeoIP2ADC.log"
 CONVERSION_TOOL="Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl"
@@ -26,7 +25,7 @@ echo "User $(whoami) started the script" | ts '[%H:%M:%S]' | tee -a $LOGFILE
 echo "Starting MaxMindGeoIP2ADC Log..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 
 # Check to see if one of the required environment variables for the script is not set
-if [[ -z "${LICENSE_KEY}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWORD}" || -z "${CITRIX_ADC_IP}" || -z "${CITRIX_ADC_PORT}" ]]; then
+if [[ -z "${LICENSE_KEY}" || -z "${EDITION}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWORD}" || -z "${CITRIX_ADC_IP}" || -z "${CITRIX_ADC_PORT}" ]]; then
     echo "One or more of the required environment variables for the script is not set properly..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
     exit 1;
 fi

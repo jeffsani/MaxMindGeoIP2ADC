@@ -17,7 +17,7 @@ echo "Setting script variables..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 echo "Enter your MaxMind License Key:"
 read LICENSE
 echo "Enter your MaxMind Edition (GeoLite2 or GeoIP2):"
-read MMEDITION
+read LICENSE_EDITION
 echo "Enter the Citrix ADC user for the script:"
 read ADC_USER
 echo "Enter the Citrix ADC user password:"
@@ -28,13 +28,13 @@ echo "Enter your Citrix ADC NSIP Port:"
 read NSIP_PORT
 
 if grep --quiet "#Start-mmgeoip2adc" ~/.bashrc; then
-   sed -i -e "s/LICENSE_KEY=.*/LICENSE_KEY=$LICENSE/" -e "s/MAXMIND_EDITION=.*/MAXMIND_EDITION=$MMEDITION/" -e "s/CITRIX_ADC_USER=.*/CITRIX_ADC_USER=$ADC_USER/" -e "s/CITRIX_ADC_PASSWORD=.*/CITRIX_ADC_PASSWORD=$ADC_PASSWD/" -e "s/CITRIX_ADC_IP=.*/CITRIX_ADC_IP=$NSIP/" -e "s/CITRIX_ADC_PORT=.*/CITRIX_ADC_PORT=$NSIP_PORT/" ~/.bashrc
+   sed -i -e "s/LICENSE_KEY=.*/LICENSE_KEY=$LICENSE/" -e "s/EDITION=.*/MAXMIND_EDITION=$LICENSE_EDITION/" -e "s/CITRIX_ADC_USER=.*/CITRIX_ADC_USER=$ADC_USER/" -e "s/CITRIX_ADC_PASSWORD=.*/CITRIX_ADC_PASSWORD=$ADC_PASSWD/" -e "s/CITRIX_ADC_IP=.*/CITRIX_ADC_IP=$NSIP/" -e "s/CITRIX_ADC_PORT=.*/CITRIX_ADC_PORT=$NSIP_PORT/" ~/.bashrc
    source ~/.bashrc;
 else
 cat >>~/.bashrc <<-EOF
 #Start-mmgeoip2adc
 export LICENSE_KEY="$LICENSE"
-export MAXMIND_EDITION="$MMEDITION"
+export EDITION="$MMEDITION"
 export CITRIX_ADC_USER="$ADC_USER"
 export CITRIX_ADC_PASSWORD="$ADC_PASSWD"
 export CITRIX_ADC_IP="$NSIP"
@@ -84,8 +84,7 @@ fi
 echo "Removing old cronjob if it exists..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 crontab -l | grep -v "mmgeoip2adc.sh" | crontab -
 echo "Creating new cron job..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-case $MMEDITION in
-if [[ $MMEDITION == "GeoLite2" ]]; then
+if [[ $LICENSE_EDITION == "GeoLite2" ]]; then
    echo "0 1 * * 3 $(pwd)/mmgeoip2adc.sh" >> mmgeoip2adc;
 else
    echo "0 1 * * 3,6 $(pwd)/mmgeoip2adc.sh" >> mmgeoip2adc;
