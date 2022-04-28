@@ -10,7 +10,7 @@ set -o pipefail
 #export LC_ALL=en_US.UTF-8">>~/.bashrc
 
 # Create init logfile
-LOGFILE="$(date '+%m%d%Y')-mmmgeoip2adc-init.log"
+LOGFILE="$(date '+%m%d%Y')-mmgeoip2adc-init.log"
 
 # Prompt for and set rc variables 
 echo "Setting script variables..." | ts '[%H:%M:%S]' | tee -a $LOGFILE

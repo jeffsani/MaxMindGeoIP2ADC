@@ -8,7 +8,7 @@ set -o pipefail
 # Local Variables
 DBTYPE="City" #Choose Country or City
 LANGUAGE="en" #Choose en, de, fr, es, jp, pt-BR, ru, or zh"
-LOGFILE="$(date '+%m%d%Y')-mmmgeoip2adc.log"
+LOGFILE="$(date '+%m%d%Y')-mmgeoip2adc.log"
 CONVERSION_TOOL="Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl"
 CITRIX_ADC_GEOIPDB_PATH="/var/netscaler/inbuilt_db"
 
@@ -17,7 +17,7 @@ function do_cleanup {
 echo "Cleaning up disposable files..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
 rm -f *.csv* *.txt *.zip* Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6
 echo "Searching for old logs > 30 days and removing them..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
-find *.log -type f -not -name '*mmmgeoip2adc-init.log' -mtime -30 -delete
+find *.log -type f -not -name '*mmgeoip2adc-init.log' -mtime -30 -delete
 }
 
 # Initiate Log
