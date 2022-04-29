@@ -15,11 +15,11 @@ The main benefit of this script is to keep the location files up-to-date as thes
 <ol type="1">
    <li>Login to your host as the user you want to create the script under</li>
    <li>su to root or another priviledged account for the package install - i.e. su root
-   <li>Complete steps 2-4 in the requirements below for access to the MaxMind GeoLite2 IP databases</li>
+   <li>Complete steps 2-4 in the requirements below for access to the MaxMind GeoLite2 or GeoIP2 databases</li>
    <li>Clone the repo into the desired directory on your linux host:</li>
-      <ul><li>git clone https://github.com/jeffsani/maxmindgeolite2adc.git <directory> (directory is optional)</li></ul>
+      <ul><li>git clone https://github.com/jeffsani/MaxMindGeoIP2ADC.git <directory> (directory is optional)</li></ul>
    <li>cd to that directory</li>
-   <li>Run the geolite2adc-init.sh script</li>
+   <li>Run the geoip2adc-init.sh script</li>
 </ol>
  
 <strong>Script Requirements</strong></br>
