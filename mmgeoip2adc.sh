@@ -71,7 +71,7 @@ LAST_MODIFIED="$(curl -s -I "$GEOIPDB_URL" | grep -Fi Last-Modified: | awk {'pri
 echo "MaxMind $EDITION IP Database last modified: $LAST_MODIFIED" | ts '[%H:%M:%S]' | tee -a $LOGFILE
 NOW=$(date | awk {'print $2,$3,$4,$5'})
 let DIFF=($(date +%s -d "$NOW")-$(date +%s -d "$LAST_MODIFIED"))/86400
-if [[ $DIFF -le 2 or $FORCERUN -eq 1 ]]; then #proceed with download of file
+if [[ $DIFF -le 2 || $FORCERUN -eq 1 ]]; then #proceed with download of file
   echo "MaxMind $EDITION IP Database was updated $DIFF days ago, commencing with downlaod..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
   # Download the file
   echo "Downloading $GEOIPDB_URL...";
