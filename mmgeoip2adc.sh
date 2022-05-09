@@ -50,12 +50,28 @@ case $DBTYPE in
    ;;    
 esac
 
+# Check flags
+while getopts 'f:u:' OPTION; do
+  case "$OPTION" in
+    f)
+     FORCERUN = 1
+      ;;
+    u)
+      echo "script usage: $(basename \$0) [-f] [-u]" >&2
+      exit 1
+      ;;
+    *)
+      FORCERUN = 0
+      ;;
+  esac
+done
+
 # Check to see if DB has been updated within the last 2 days
 LAST_MODIFIED="$(curl -s -I "$GEOIPDB_URL" | grep -Fi Last-Modified: | awk {'print $3,$4,$5,$6'})"
 echo "MaxMind $EDITION IP Database last modified: $LAST_MODIFIED" | ts '[%H:%M:%S]' | tee -a $LOGFILE
 NOW=$(date | awk {'print $2,$3,$4,$5'})
 let DIFF=($(date +%s -d "$NOW")-$(date +%s -d "$LAST_MODIFIED"))/86400
-if [[ $DIFF -le 2 ]]; then #proceed with download of file
+if [[ $DIFF -le 2 or $FORCERUN -eq 1 ]]; then #proceed with download of file
   echo "MaxMind $EDITION IP Database was updated $DIFF days ago, commencing with downlaod..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
   # Download the file
   echo "Downloading $GEOIPDB_URL...";
