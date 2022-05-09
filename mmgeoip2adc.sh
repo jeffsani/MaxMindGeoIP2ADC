@@ -72,7 +72,7 @@ echo "MaxMind $EDITION IP Database last modified: $LAST_MODIFIED" | ts '[%H:%M:%
 NOW=$(date | awk {'print $2,$3,$4,$5'})
 let DIFF=($(date +%s -d "$NOW")-$(date +%s -d "$LAST_MODIFIED"))/86400
 if [[ $DIFF -le 2 || $FORCERUN ]]; then #proceed with download of file
-  echo "MaxMind $EDITION IP Database was updated $DIFF days ago or force paramter specified, commencing with downlaod..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+  echo "MaxMind $EDITION IP Database was updated 2 or fewer days ago or force paramter specified, commencing with downlaod..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
   # Download the file
   echo "Downloading $GEOIPDB_URL...";
   GEOIPDB_FILE=$(curl -s -O -J -w '%{filename_effective}' "$GEOIPDB_URL" | awk {'print $1'});
