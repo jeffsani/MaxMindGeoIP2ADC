@@ -24,6 +24,27 @@ find *.log -type f -not -name '*mmgeoip2adc-init.log' -mtime -30 -delete
 echo "User $(whoami) started the script" | ts '[%H:%M:%S]' | tee -a $LOGFILE
 echo "Starting MaxMindGeoIP2ADC Log..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 
+# Check flags
+while getopts 'fu' OPTION; do
+  case "$OPTION" in
+    f)
+      FORCERUN=true
+      echo "force parameter detected - skipping freshness check..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+      ;;
+    u)
+      echo "script usage: $(basename \$0) [-f] [-u]" >&2
+      exit 1
+      ;;
+    ?)
+      echo "script usage: $(basename \$0) [-f] [-u]" >&2
+      exit 1
+      ;;
+    *)
+      FORCERUN=false
+      ;;
+  esac
+done
+
 # Check to see if one of the required environment variables for the script is not set
 source ~/.bashrc
 if [[ -z "${LICENSE_KEY}" || -z "${EDITION}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWORD}" || -z "${CITRIX_ADC_IP}" || -z "${CITRIX_ADC_PORT}" ]]; then
@@ -49,22 +70,6 @@ case $DBTYPE in
       exit 1;
    ;;    
 esac
-
-# Check flags
-while getopts 'fu' OPTION; do
-  case "$OPTION" in
-    f)
-      FORCERUN=true
-      ;;
-    u)
-      echo "script usage: $(basename \$0) [-f] [-u]" >&2
-      exit 1
-      ;;
-    *)
-      FORCERUN=false
-      ;;
-  esac
-done
 
 # Check to see if DB has been updated within the last 2 days
 LAST_MODIFIED="$(curl -s -I "$GEOIPDB_URL" | grep -Fi Last-Modified: | awk {'print $3,$4,$5,$6'})"

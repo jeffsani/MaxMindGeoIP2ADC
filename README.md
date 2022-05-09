@@ -50,6 +50,9 @@ The following variables and their respective values are required at script runti
    <li>CITRIX_ADC_PORT=NNN</li>
 </ul>
 
+<strong>Script Usage</strong></br>
+If you want to override the freshness check for the databases, you can use the -f flag when running the script. i.e. - ./mmgeoip2adc.sh -f
+
 <strong>ADC Service Account and Command Policy</strong></br>
 It is optional but recommended to create a service account on ADC to use for the purposes of running this script in lieu of just using nsroot:  
 
