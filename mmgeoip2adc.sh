@@ -29,7 +29,7 @@ while getopts 'fu' OPTION; do
   case "$OPTION" in
     f)
       FORCERUN=true
-      echo "force parameter detected - skipping freshness check..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+      echo "Force parameter detected - skipping freshness check..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
       ;;
     u)
       echo "script usage: $(basename \$0) [-f] [-u]" >&2
