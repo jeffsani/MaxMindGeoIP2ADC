@@ -20,15 +20,14 @@ echo "Searching for old logs > 30 days and removing them..." | ts '[%H:%M:%S]' |
 find *.log -type f -not -name '*mmgeoip2adc-init.log' -mtime -30 -delete
 }
 
-# Initiate Log
-echo "User $(whoami) started the script" | ts '[%H:%M:%S]' | tee -a $LOGFILE
-echo "Starting MaxMindGeoIP2ADC Log..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-
-# Check flags
+# Check flags and initiate log
 while getopts 'fu' OPTION; do
   case "$OPTION" in
     f)
       FORCERUN=true
+      # Initiate Log
+      echo "User $(whoami) started the script" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+      echo "Starting MaxMindGeoIP2ADC Log..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
       echo "Force parameter detected - skipping freshness check..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
       ;;
     u)
@@ -41,6 +40,9 @@ while getopts 'fu' OPTION; do
       ;;
     *)
       FORCERUN=false
+      # Initiate Log
+      echo "User $(whoami) started the script" | ts '[%H:%M:%S]' | tee -a $LOGFILE;
+      echo "Starting MaxMindGeoIP2ADC Log..." | ts '[%H:%M:%S]' | tee -a $LOGFILE;
       ;;
   esac
 done
