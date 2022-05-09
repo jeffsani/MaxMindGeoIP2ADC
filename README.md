@@ -51,7 +51,9 @@ The following variables and their respective values are required at script runti
 </ul>
 
 <strong>Script Usage</strong></br>
-If you want to override the freshness check for the databases, you can use the -f flag when running the script. i.e. - ./mmgeoip2adc.sh -f
+If you want to override the freshness check for the databases, you can use the -f flag when running the script:
+
+<code>#./mmgeoip2adc.sh -f</code>
 
 <strong>ADC Service Account and Command Policy</strong></br>
 It is optional but recommended to create a service account on ADC to use for the purposes of running this script in lieu of just using nsroot:  
