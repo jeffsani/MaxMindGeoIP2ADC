@@ -51,7 +51,7 @@ case $DBTYPE in
 esac
 
 # Check flags
-while getopts 'f:u:' OPTION; do
+while getopts 'fu' OPTION; do
   case "$OPTION" in
     f)
       FORCERUN=true
