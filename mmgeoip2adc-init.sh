@@ -57,7 +57,8 @@ else
    echo "Conversion tool already present - skipping download..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 fi
 
-# Check known_hosts file for presence of NSIP and add if not present
+# Check known_hosts file and presence of NSIP and add if not present
+if [ ! -r ~/.ssh/known_hosts ]; then mkdir -p ~/.ssh; touch ~/.ssh/known_hosts; fi
 if [ $NSIP_PORT -eq "22" ]; then
    ssh-keygen -F $NSIP -f ~/.ssh/known_hosts &>/dev/null
    if [ "$?" -ne "0" ]; then 
