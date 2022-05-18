@@ -13,7 +13,7 @@ set -o pipefail
 LOGFILE="$(date '+%m%d%Y')-mmgeoip2adc-init.log"
 
 # Prompt for and set rc variables 
-echo "Setting script variables..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+echo "Setting script variables in ~/.bashrc..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 echo "Enter your MaxMind License Key:"
 read LICENSE
 echo "Enter your MaxMind Edition (GeoLite2 or GeoIP2):"
@@ -31,22 +31,22 @@ if grep --quiet "#Start-mmgeoip2adc" ~/.bashrc; then
    sed -i -e "s/LICENSE_KEY=.*/LICENSE_KEY=$LICENSE/" -e "s/EDITION=.*/EDITION=$LICENSE_EDITION/" -e "s/CITRIX_ADC_USER=.*/CITRIX_ADC_USER=$ADC_USER/" -e "s/CITRIX_ADC_PASSWORD=.*/CITRIX_ADC_PASSWORD=$ADC_PASSWD/" -e "s/CITRIX_ADC_IP=.*/CITRIX_ADC_IP=$NSIP/" -e "s/CITRIX_ADC_PORT=.*/CITRIX_ADC_PORT=$NSIP_PORT/" ~/.bashrc
 else
 cat >>~/.bashrc <<-EOF
-#Start-mmgeoip2adc
+#Start-NetScaler-Vars
 export LICENSE_KEY="$LICENSE"
 export EDITION="$LICENSE_EDITION"
 export CITRIX_ADC_USER="$ADC_USER"
 export CITRIX_ADC_PASSWORD="$ADC_PASSWD"
 export CITRIX_ADC_IP="$NSIP"
 export CITRIX_ADC_PORT="$NSIP_PORT"
-#End-mmgeoip2adc
+#End-NetScaler-Vars
 EOF
 fi
 echo "Script variables set successfully..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 
 # Download and install pre-requisites
 echo "Installing required system pre-requisites..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-which yum >/dev/null && { yum install curl unzip perl-libwww-perl perl-MIME-Lite perl-Net-IP perl-Time-Piece sshpass more-utils; }
-which apt-get >/dev/null && { apt install curl unzip libwww-perl libmime-lite-perl libnet-ip-perl sshpass moreutils; }
+which sudo yum >/dev/null && { sudo yum install curl unzip perl-libwww-perl perl-MIME-Lite perl-Net-IP perl-Time-Piece sshpass more-utils; }
+which sudo apt-get >/dev/null && { sudo apt install curl unzip libwww-perl libmime-lite-perl libnet-ip-perl sshpass moreutils; }
 
 # Download NetScaler format conversion script in to same directory
 echo "Checking for MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format repo..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
