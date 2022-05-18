@@ -63,8 +63,8 @@ if [ $NSIP_PORT -eq "22" ]; then
    ssh-keygen -F $NSIP -f ~/.ssh/known_hosts &>/dev/null
    if [ "$?" -ne "0" ]; then 
       # Add ADC to known_hosts
-      echo "Adding ADC IP to known_hosts..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-      ssh-keyscan $NSIP >> ~/.ssh/known_hosts
+      echo "Adding ADC IP $NSIP to known_hosts..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+      ssh-keyscan $NSIP >> ~/.ssh/known_hosts 2> /dev/null
    else
       echo "ADC IP already present in known_hosts - Skipping add..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
    fi
@@ -72,10 +72,10 @@ else
    ssh-keygen -F '[$NSIP]:$NSIP_PORT' -f ~/.ssh/known_hosts &>/dev/null
    if [ "$?" -ne "0" ]; then 
       # Add ADC to known_hosts
-      echo "Adding ADC IP to known_hosts..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-      ssh-keyscan -p $NSIP_PORT $NSIP >> ~/.ssh/known_hosts
+      echo "Adding ADC IP $NSIP to known_hosts..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+      ssh-keyscan -p $NSIP_PORT $NSIP >> ~/.ssh/known_hosts  2> /dev/null
    else
-      echo "ADC IP already present in known_hosts - Skipping add..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+      echo "ADC IP $NSIP already present in known_hosts - Skipping add..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
    fi
 fi
 
