@@ -80,7 +80,7 @@ else
 fi
 
 # Create cron job for scheduling the script to be run weekly on Wed at 1AM
-echo "Removing old cronjob if it exists..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+echo "Removing old cron job if it exists..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 crontab -l | grep -v "mmgeoip2adc.sh" | crontab -
 echo "Creating new cron job..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 if [[ $LICENSE_EDITION == "GeoLite2" ]]; then
