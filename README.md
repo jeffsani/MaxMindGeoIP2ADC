@@ -14,7 +14,7 @@ The main benefit of this script is to keep the location files up-to-date as thes
 <strong>Automated Setup Steps (For CentOS/Fedora or Ubuntu Linux Host)</strong></br>
 <ol type="1">
    <li>Login to your host as the user you want to create the script under</li>
-   <li>su to root or another priviledged account for the package install - i.e. su root
+   <li>Install the required Linux packages or follow this prompt in the init script</li>
    <li>Complete steps 2-4 in the requirements below for access to the MaxMind GeoLite2 or GeoIP2 databases</li>
    <li>Clone the repo into the desired directory on your linux host:</li>
       <ul><li>git clone https://github.com/jeffsani/MaxMindGeoIP2ADC.git <directory> (directory is optional)</li></ul>
@@ -25,7 +25,7 @@ The main benefit of this script is to keep the location files up-to-date as thes
 <strong>Script Requirements</strong></br>
 To implement this script you will need the following if you plan to implement manually and not use the init script:
 <ol type="1">
-   <li>A host or container to run this on</li>
+   <li>A Linux host or container to run this on</li>
    <li>A <a href="https://www.maxmind.com/en/geolite2/signup?lang=en">GeoLite2</a> account or GeoIP2 Enterprise account </li>
    <li>An API License Key - created post account setup in the MaxMind portal</li>
    <li>Permalinks to the Country and/or City Geo IP Databases in CSV format - obtained on the downloads page within your account</li>

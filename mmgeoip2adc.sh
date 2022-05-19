@@ -99,12 +99,12 @@ CHECKSUM=$(sha256sum -c $GEOIPDB_CHECKSUM_FILE | awk {'print $2'})
 if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
    echo "The MaxMind $EDITION Database file checksum is verified. Unpacking archive for conversion..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
    # Unzip the MaxMind IP DB
-   unzip -q -j $GEOIPDB_FILE
+   unzip -q -j $GEOIPDB_FILE &>>$LOGFILE
    echo "Unzipped $GEOIPDB_FILE..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
    # Run the Citrix tool to convert the geoip files to NetScaler format
    if [ -f "$CONVERSION_TOOL" ]; then
       echo "Running the Citrix conversion tool to convert the geoip db files to NetScaler format..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-      perl $CONVERSION_TOOL -b $EDITION-$DBTYPE-Blocks-IPv4.csv -i $EDITION-$DBTYPE-Blocks-IPv6.csv -l  $EDITION-$DBTYPE-Locations-$LANGUAGE.csv -o Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -p Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -logfile $LOGFILE
+      perl $CONVERSION_TOOL -b $EDITION-$DBTYPE-Blocks-IPv4.csv -i $EDITION-$DBTYPE-Blocks-IPv6.csv -l  $EDITION-$DBTYPE-Locations-$LANGUAGE.csv -o Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -p Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -logfile $LOGFILE &>>$LOGFILE
       echo "Successfully converted MaxMind $EDITION IP Database files to NetScaler format..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
    else 
       echo "The Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl was not present, please refer to the README.md for the script requirements - Exiting..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
@@ -117,14 +117,14 @@ if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
  
    # Transfer the files to the ADC
    echo "Transfering files to ADC..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-   sshpass -p "$CITRIX_ADC_PASSWORD" scp -q -P $CITRIX_ADC_PORT Citrix_Netscaler_InBuilt_GeoIP_DB_IPv* $CITRIX_ADC_USER@$CITRIX_ADC_IP:$CITRIX_ADC_GEOIPDB_PATH
+   sshpass -p "$CITRIX_ADC_PASSWORD" scp -q -P $CITRIX_ADC_PORT Citrix_Netscaler_InBuilt_GeoIP_DB_IPv* $CITRIX_ADC_USER@$CITRIX_ADC_IP:$CITRIX_ADC_GEOIPDB_PATH &>>$LOGFILE
    echo "Adding IPv4 and IPv6 GeoIP location files to ADC configuration for use in GSLB and PI..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
    # Add the location db files (benign if already present in config)
-   sshpass -p "$CITRIX_ADC_PASSWORD" ssh -q $CITRIX_ADC_USER@$CITRIX_ADC_IP -p $CITRIX_ADC_PORT "add locationFile $CITRIX_ADC_GEOIPDB_PATH/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -format netscaler"
-   sshpass -p "$CITRIX_ADC_PASSWORD" ssh -q $CITRIX_ADC_USER@$CITRIX_ADC_IP -p $CITRIX_ADC_PORT "add locationFile6 $CITRIX_ADC_GEOIPDB_PATH/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -format netscaler"
+   sshpass -p "$CITRIX_ADC_PASSWORD" ssh -q $CITRIX_ADC_USER@$CITRIX_ADC_IP -p $CITRIX_ADC_PORT "add locationFile $CITRIX_ADC_GEOIPDB_PATH/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -format netscaler" &>>$LOGFILE
+   sshpass -p "$CITRIX_ADC_PASSWORD" ssh -q $CITRIX_ADC_USER@$CITRIX_ADC_IP -p $CITRIX_ADC_PORT "add locationFile6 $CITRIX_ADC_GEOIPDB_PATH/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -format netscaler" &>>$LOGFILE
    # Save the ns.conf - this will also invoke the filesync process to synchronize the db files to ha peer nodes or cluster nodes (note - watchdog will also eventually do this)
    echo "Saving configuration and invoking filesync..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-   sshpass -p "$CITRIX_ADC_PASSWORD" ssh -q $CITRIX_ADC_USER@$CITRIX_ADC_IP -p $CITRIX_ADC_PORT "save config"
+   sshpass -p "$CITRIX_ADC_PASSWORD" ssh -q $CITRIX_ADC_USER@$CITRIX_ADC_IP -p $CITRIX_ADC_PORT "save config" &>>$LOGFILE
 else
   echo "The checksum failed.  File is corrupt or tampered with in transit..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
   do_cleanup
