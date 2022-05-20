@@ -4,11 +4,6 @@
 
 set -o pipefail
 
-# Fix perl locale issue
-#echo "export LANGUAGE=en_US.UTF-8 
-#export LANG=en_US.UTF-8 
-#export LC_ALL=en_US.UTF-8">>~/.bashrc
-
 # Create init logfile
 LOGFILE="$(date '+%m%d%Y')-mmgeoip2adc-init.log"
 
@@ -44,9 +39,17 @@ fi
 echo "Script variables set successfully..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 
 # Download and install pre-requisites
-echo "Installing required system pre-requisites..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-which sudo yum >/dev/null && { sudo yum install curl unzip perl-libwww-perl perl-MIME-Lite perl-Net-IP perl-Time-Piece sshpass more-utils; }
-which sudo apt-get >/dev/null && { sudo apt install curl unzip libwww-perl libmime-lite-perl libnet-ip-perl sshpass moreutils; }
+echo "Do you want to install required system pre-requisites (requires elevated privs or sudoer membership) Y/N?..."
+read ANSWER1
+ANSWER1=${ANSWER1,,} # convert to lowercase
+if [ "$ANSWER1" == "y" ]; then
+   echo "Installing required system pre-requisites..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+   which sudo yum >/dev/null && { sudo yum install curl unzip perl-libwww-perl perl-MIME-Lite perl-Net-IP perl-Time-Piece sshpass more-utils; }
+   which sudo apt-get >/dev/null && { sudo apt install curl unzip libwww-perl libmime-lite-perl libnet-ip-perl sshpass moreutils; }
+else
+   echo "Skipping install of required system pre-requisites..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+   echo "Please refer to Readme for script requirements..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+fi
 
 # Download NetScaler format conversion script in to same directory
 echo "Checking for MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format repo..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
