@@ -39,7 +39,7 @@ fi
 echo "Script variables set successfully..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 
 # Download and install pre-requisites
-echo "Do you want to install required system pre-requisites (requires elevated privs or sudoer membership) Y/N?..."
+echo "Do you want to install required system pre-requisites (requires elevated privs or sudoer membership) [Y/n]?..."
 read ANSWER1
 ANSWER1=${ANSWER1,,} # convert to lowercase
 if [ "$ANSWER1" == "y" ]; then
