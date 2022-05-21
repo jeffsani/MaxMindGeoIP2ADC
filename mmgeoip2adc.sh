@@ -10,7 +10,7 @@ DBTYPE="City" #Choose Country or City
 LANGUAGE="en" #Choose en, de, fr, es, jp, pt-BR, ru, or zh"
 LOGFILE="$(date '+%m%d%Y')-mmgeoip2adc.log"
 CONVERSION_TOOL="Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl"
-CITRIX_ADC_GEOIPDB_PATH="/var/netscaler/inbuilt_db"
+MMGEOIP2ADC_ADC_GEOIPDB_PATH="/var/netscaler/inbuilt_db"
 
 # Do Cleanup function
 function do_cleanup {
@@ -49,7 +49,7 @@ done
 
 # Check to see if one of the required environment variables for the script is not set
 source ~/.bashrc
-if [[ -z "${LICENSE_KEY}" || -z "${EDITION}" || -z "${CITRIX_ADC_USER}" || -z "${CITRIX_ADC_PASSWORD}" || -z "${CITRIX_ADC_IP}" || -z "${CITRIX_ADC_PORT}" ]]; then
+if [[ -z "${LICENSE_KEY}" || -z "${EDITION}" || -z "${MMGEOIP2ADC_ADC_USER}" || -z "${MMGEOIP2ADC_ADC_PASSWORD}" || -z "${MMGEOIP2ADC_ADC_IP}" || -z "${MMGEOIP2ADC_ADC_PORT}" ]]; then
     echo "One or more of the required environment variables for the script is not set properly..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
     exit 1
 fi
@@ -117,14 +117,14 @@ if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
  
    # Transfer the files to the ADC
    echo "Transfering files to ADC..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-   sshpass -p "$CITRIX_ADC_PASSWORD" scp -q -P $CITRIX_ADC_PORT Citrix_Netscaler_InBuilt_GeoIP_DB_IPv* $CITRIX_ADC_USER@$CITRIX_ADC_IP:$CITRIX_ADC_GEOIPDB_PATH &>>$LOGFILE
+   sshpass -p "$MMGEOIP2ADC_ADC_PASSWORD" scp -q -P $MMGEOIP2ADC_ADC_PORT Citrix_Netscaler_InBuilt_GeoIP_DB_IPv* $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP:$MMGEOIP2ADC_ADC_GEOIPDB_PATH &>>$LOGFILE
    echo "Adding IPv4 and IPv6 GeoIP location files to ADC configuration for use in GSLB and PI..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
    # Add the location db files (benign if already present in config)
-   sshpass -p "$CITRIX_ADC_PASSWORD" ssh -q $CITRIX_ADC_USER@$CITRIX_ADC_IP -p $CITRIX_ADC_PORT "add locationFile $CITRIX_ADC_GEOIPDB_PATH/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -format netscaler" &>>$LOGFILE
-   sshpass -p "$CITRIX_ADC_PASSWORD" ssh -q $CITRIX_ADC_USER@$CITRIX_ADC_IP -p $CITRIX_ADC_PORT "add locationFile6 $CITRIX_ADC_GEOIPDB_PATH/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -format netscaler" &>>$LOGFILE
+   sshpass -p "$MMGEOIP2ADC_ADC_PASSWORD" ssh -q $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP -p $MMGEOIP2ADC_ADC_PORT "add locationFile $MMGEOIP2ADC_ADC_GEOIPDB_PATH/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -format netscaler" &>>$LOGFILE
+   sshpass -p "$MMGEOIP2ADC_ADC_PASSWORD" ssh -q $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP -p $MMGEOIP2ADC_ADC_PORT "add locationFile6 $MMGEOIP2ADC_ADC_GEOIPDB_PATH/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -format netscaler" &>>$LOGFILE
    # Save the ns.conf - this will also invoke the filesync process to synchronize the db files to ha peer nodes or cluster nodes (note - watchdog will also eventually do this)
    echo "Saving configuration and invoking filesync..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-   sshpass -p "$CITRIX_ADC_PASSWORD" ssh -q $CITRIX_ADC_USER@$CITRIX_ADC_IP -p $CITRIX_ADC_PORT "save config" &>>$LOGFILE
+   sshpass -p "$MMGEOIP2ADC_ADC_PASSWORD" ssh -q $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP -p $MMGEOIP2ADC_ADC_PORT "save config" &>>$LOGFILE
 else
   echo "The checksum failed.  File is corrupt or tampered with in transit..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
   do_cleanup
