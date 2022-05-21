@@ -11,7 +11,7 @@ LOGFILE="$(date '+%m%d%Y')-mmgeoip2adc-init.log"
 echo "Setting script variables in ~/.bashrc..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
 echo "Enter your MaxMind License Key:"
 read LICENSE
-echo "Enter your MaxMind Edition (GeoLite2 or GeoIP2):"
+echo "Enter your MaxMind Edition [GeoLite2 or GeoIP2]:"
 read LICENSE_EDITION
 echo "Enter the Citrix ADC user for the script:"
 read ADC_USER
