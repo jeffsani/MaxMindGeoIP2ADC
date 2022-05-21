@@ -22,18 +22,18 @@ read NSIP
 echo "Enter your Citrix ADC NSIP Port:"
 read NSIP_PORT
 
-if grep -q "#Start-mmgeoip2adc" ~/.bashrc; then
+if grep -q "#Start-mmgeoip2adc-Vars" ~/.bashrc; then
    sed -i -e "s/LICENSE_KEY=.*/LICENSE_KEY=$LICENSE/" -e "s/EDITION=.*/EDITION=$LICENSE_EDITION/" -e "s/CITRIX_ADC_USER=.*/CITRIX_ADC_USER=$ADC_USER/" -e "s/CITRIX_ADC_PASSWORD=.*/CITRIX_ADC_PASSWORD=$ADC_PASSWD/" -e "s/CITRIX_ADC_IP=.*/CITRIX_ADC_IP=$NSIP/" -e "s/CITRIX_ADC_PORT=.*/CITRIX_ADC_PORT=$NSIP_PORT/" ~/.bashrc
 else
 cat >>~/.bashrc <<-EOF
-#Start-NetScaler-Vars
+#Start-mmgeoip2adc-Vars
 export LICENSE_KEY="$LICENSE"
 export EDITION="$LICENSE_EDITION"
 export CITRIX_ADC_USER="$ADC_USER"
 export CITRIX_ADC_PASSWORD="$ADC_PASSWD"
 export CITRIX_ADC_IP="$NSIP"
 export CITRIX_ADC_PORT="$NSIP_PORT"
-#End-NetScaler-Vars
+#End-mmgeoip2adc-Vars
 EOF
 fi
 echo "Script variables set successfully..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
