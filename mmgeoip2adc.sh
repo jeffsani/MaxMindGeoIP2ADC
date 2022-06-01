@@ -50,7 +50,7 @@ done
 
 # Check to see if one of the required environment variables for the script is not set
 source ~/.bashrc
-if [ -z "$LICENSE_KEY" ] || [ -z "EDITION" ] || [ -z "$MMGEOIP2ADC_ADC_USER" ] || [ -z "$MMGEOIP2ADC_ADC_PASSWORD" ] || [ -z "$MMGEOIP2ADC_ADC_IP" ] || [ -z "$MMGEOIP2ADC_ADC_PORT" ] || [ -z "$SSHPASS" ]; then
+if [[ -z "$LICENSE_KEY" || -z "EDITION" || -z "$MMGEOIP2ADC_ADC_USER" || -z "$MMGEOIP2ADC_ADC_PASSWORD" || -z "$MMGEOIP2ADC_ADC_IP" || -z "$MMGEOIP2ADC_ADC_PORT" || -z "$SSHPASS" ]]; then
     echo "One or more of the required environment variables for the script is not set properly..."
     exit 1
 fi
