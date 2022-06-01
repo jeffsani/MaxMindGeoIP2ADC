@@ -25,6 +25,7 @@ The main benefit of this script is to keep the location files up-to-date as thes
 To implement this script you will need the following if you plan to implement manually and not use the init script:
 <ol type="1">
    <li>A Linux host or container to run this on</li>
+   <li>Citrix ADC Build Version 12.1, 13.0, or 13.1 (It may work on older builds as well but I did not test those and they are EOL)</li>
    <li>A <a href="https://www.maxmind.com/en/geolite2/signup?lang=en">GeoLite2</a> account or GeoIP2 Enterprise account </li>
    <li>An API License Key - created post account setup in the MaxMind portal</li>
    <li>Permalinks to the Country and/or City Geo IP Databases in CSV format - obtained on the downloads page within your account</li>
@@ -34,7 +35,7 @@ To implement this script you will need the following if you plan to implement ma
           <li>CentOS/Fedora: curl unzip perl-libwww-perl perl-MIME-Lite perl-Net-IP perl-Time-Piece git sshpass more-utils</li>
        </ul>
    <li>The <a href ="https://github.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format">Citrix ADC GSLB GeoIP Conversion Tool</a></li>
-   <li>Environment variables set for the user running the script that contain the Citrix ADC user/pass, and the Citrix ADC IP/Port as per below</li>
+   <li>Environment variables set for the user running the script that contain the MaxMind and Citrix ADC details as per below</li>
    <li>cron job to schedule the script to check for IP DB updates</li>
 </ol>
 
