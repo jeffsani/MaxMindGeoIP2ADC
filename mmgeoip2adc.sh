@@ -49,7 +49,11 @@ while getopts 'fu' OPTION; do
 done
 
 # Check to see if one of the required environment variables for the script is not set
-source ~/.bashrc
+if [[ $- == *i* ]]; then
+   source ~/.bash_profile
+else
+   source ~/.bashrc
+fi
 if [[ -z "$LICENSE_KEY" || -z "EDITION" || -z "$MMGEOIP2ADC_ADC_USER" || -z "$MMGEOIP2ADC_ADC_PASSWORD" || -z "$MMGEOIP2ADC_ADC_IP" || -z "$MMGEOIP2ADC_ADC_PORT" || -z "$SSHPASS" ]]; then
     echo "One or more of the required environment variables for the script is not set properly..."
     exit 1
