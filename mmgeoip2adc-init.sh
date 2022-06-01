@@ -20,7 +20,7 @@ echo "Enter the Citrix ADC user for the script: "; read ADC_USER
 echo "Enter the Citrix ADC user password: "; read -s ADC_PASSWD
 echo "Enter your Citrix ADC NSIP: "; read NSIP
 echo "Enter your Citrix ADC NSIP Port: "; read NSIP_PORT
-
+source ~/.bashrc
 if [[ ! -z "$LICENSE_KEY" && ! -z "EDITION" && ! -z "$MMGEOIP2ADC_ADC_USER" && ! -z "$MMGEOIP2ADC_ADC_PASSWORD" && ! -z "$MMGEOIP2ADC_ADC_IP" && ! -z "$MMGEOIP2ADC_ADC_PORT" && ! -z "$SSHPASS" ]]; then
    echo "Exisitng variables detected - refreshing values..."
    sed -i -e "s/LICENSE_KEY=.*/LICENSE_KEY=$LICENSE/" -e "s/EDITION=.*/EDITION=$LICENSE_EDITION/" -e "s/MMGEOIP2ADC_ADC_USER=.*/MMGEOIP2ADC_ADC_USER=$ADC_USER/" -e "s/MMGEOIP2ADC_ADC_PASSWORD=.*/MMGEOIP2ADC_ADC_PASSWORD=\'$ADC_PASSWD\'/" -e "s/MMGEOIP2ADC_ADC_IP=.*/MMGEOIP2ADC_ADC_IP=$NSIP/" -e "s/MMGEOIP2ADC_ADC_PORT=.*/MMGEOIP2ADC_ADC_PORT=$NSIP_PORT/" -e "s/SSHPASS=.*/SSHPASS=\'$ADC_PASSWD\'/" ~/.bashrc
