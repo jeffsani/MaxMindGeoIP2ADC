@@ -1,9 +1,8 @@
 # MaxMindGeoIP2ADC
-
-Initial version: 1.0</br>
-Latest Update: 5/19/2022</br>
 Author: Jeff Sani</br>
 Contributors: Matt Drown, Chuck Cox</br>
+Version: 1.0</br>
+Last Update: 5/27/2022</br>
 
 <img src="mmgeoip2adc.png" style="display:block; margin-left: auto; margin-right: auto;">
 <strong>Description</strong></br>
@@ -40,7 +39,7 @@ To implement this script you will need the following if you plan to implement ma
 </ol>
 
 <strong>Required Environment Variables</strong></br>
-The following variables and their respective values are required at script runtime so it is suggested they be stored in .bashrc
+The following variables and their respective values are required at script runtime so it is suggested they be stored in .bashrc and or .bash_profile or a local configuration file
 <ul>
    <li>LICENSE_KEY=XXXX</li>
    <li>EDITION=[GeoLite2 or GeoIP2]</li>
@@ -48,6 +47,7 @@ The following variables and their respective values are required at script runti
    <li>CITRIX_ADC_PASSWORD=XXX</li>
    <li>CITRIX_ADC_IP=X.X.X.X</li>
    <li>CITRIX_ADC_PORT=NNN</li>
+   <li>SSHPASS=XXX</li>
 </ul>
 
 <strong>Script Usage</strong></br>
