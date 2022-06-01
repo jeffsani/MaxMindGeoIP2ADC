@@ -21,8 +21,10 @@ echo "Enter the Citrix ADC user password: "; read -s ADC_PASSWD
 echo "Enter your Citrix ADC NSIP: "; read NSIP
 echo "Enter your Citrix ADC NSIP Port: "; read NSIP_PORT
 if [[ $- == *i* ]]; then
+   echo "Running interactively so loading bash_profile vars..."
    source ~/.bash_profile
 else
+   echo "Running non-interactively so loading bashrc vars..."
    source ~/.bashrc
 fi
 if [[ ! -z "$LICENSE_KEY" && ! -z "EDITION" && ! -z "$MMGEOIP2ADC_ADC_USER" && ! -z "$MMGEOIP2ADC_ADC_PASSWORD" && ! -z "$MMGEOIP2ADC_ADC_IP" && ! -z "$MMGEOIP2ADC_ADC_PORT" && ! -z "$SSHPASS" ]]; then
