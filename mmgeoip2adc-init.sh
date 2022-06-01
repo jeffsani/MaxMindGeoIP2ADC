@@ -100,7 +100,8 @@ crontab -l | grep -v "mmgeoip2adc.sh" | crontab -
 echo "Backing up existing entries..."
 crontab -l > mmgeoip2adc
 echo "Creating new cron job..."
-if [[ $LICENSE_EDITION == "GeoLite2" ]]; then
+LICENSE_EDITION=${LICENSE_EDITION,,} # convert to lowercase
+if [[ $LICENSE_EDITION == "geolite2" ]]; then
    echo "0 1 * * 3 $(pwd)/mmgeoip2adc.sh" >> mmgeoip2adc
 else
    echo "0 1 * * 3,6 $(pwd)/mmgeoip2adc.sh" >> mmgeoip2adc
