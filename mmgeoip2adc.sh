@@ -58,7 +58,7 @@ if [[ -z "$LICENSE_KEY" || -z "EDITION" || -z "$MMGEOIP2ADC_ADC_USER" || -z "$MM
     exit 1
 else
   #Set SSHPASS var for automation
-  export SSHPASS="$NSC2E_ADC_PASSWORD"
+  export SSHPASS="$MMGEOIP2ADC_ADC_PASSWORD"
 fi
 
 # Set GEODB_URL and GEODB_CHECKSUM based on DBTYPE variable
@@ -123,14 +123,14 @@ if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
    gunzip Citrix_Netscaler_InBuilt_GeoIP_DB*
    # Transfer the files to the ADC
    echo "Transfering files to ADC..."
-   sshpass -e scp -P $MMGEOIP2ADC_ADC_PORT Citrix_Netscaler_InBuilt_GeoIP_DB_IPv* $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP:$MMGEOIP2ADC_ADC_GEOIPDB_PATH < /dev/null
+   sshpass -e scp -q -P $MMGEOIP2ADC_ADC_PORT Citrix_Netscaler_InBuilt_GeoIP_DB_IPv* $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP:$MMGEOIP2ADC_ADC_GEOIPDB_PATH < /dev/null
    echo "Adding IPv4 and IPv6 GeoIP location files to ADC configuration for use in GSLB and PI..."
    # Add the location db files (benign if already present in config)
-   sshpass -e ssh $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP -p $MMGEOIP2ADC_ADC_PORT "add locationFile $MMGEOIP2ADC_ADC_GEOIPDB_PATH/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -format netscaler"  < /dev/null
-   sshpass -e ssh $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP -p $MMGEOIP2ADC_ADC_PORT "add locationFile6 $MMGEOIP2ADC_ADC_GEOIPDB_PATH/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -format netscaler" < /dev/null
+   sshpass -e ssh -q $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP -p $MMGEOIP2ADC_ADC_PORT "add locationFile $MMGEOIP2ADC_ADC_GEOIPDB_PATH/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -format netscaler"  < /dev/null
+   sshpass -e ssh -q $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP -p $MMGEOIP2ADC_ADC_PORT "add locationFile6 $MMGEOIP2ADC_ADC_GEOIPDB_PATH/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -format netscaler" < /dev/null
    # Save the ns.conf - this will also invoke the filesync process to synchronize the db files to ha peer nodes or cluster nodes (note - watchdog will also eventually do this)
    echo "Saving configuration and invoking filesync..."
-   sshpass -e ssh $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP -p $MMGEOIP2ADC_ADC_PORT "save config"  < /dev/null
+   sshpass -e ssh -q $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP -p $MMGEOIP2ADC_ADC_PORT "save config"  < /dev/null
 else
    echo "The checksum failed.  File is corrupt or tampered with in transit..."
    do_cleanup
