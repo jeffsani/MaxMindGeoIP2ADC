@@ -58,7 +58,7 @@ if [[ -z "$LICENSE_KEY" || -z "EDITION" || -z "$MMGEOIP2ADC_ADC_USER" || -z "$MM
     exit 1
 else
   #Set SSHPASS var for automation
-export SSHPASS="$NSC2E_ADC_PASSWORD"
+  export SSHPASS="$NSC2E_ADC_PASSWORD"
 fi
 
 # Set GEODB_URL and GEODB_CHECKSUM based on DBTYPE variable
@@ -138,7 +138,7 @@ else
   exit 1
 fi
 
-do_cleanup
+#do_cleanup
 
 echo "All done..."
 >> $LOGFILE) 2>&1 | ts '[%H:%M:%S]' | tee -a $LOGFILE
