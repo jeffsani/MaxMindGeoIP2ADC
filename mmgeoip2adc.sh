@@ -124,21 +124,22 @@ if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
  
    # Transfer the files to the ADC
    echo "Transfering files to ADC..."
-   sshpass -e  scp -q -P $MMGEOIP2ADC_ADC_PORT Citrix_Netscaler_InBuilt_GeoIP_DB_IPv* $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP:$MMGEOIP2ADC_ADC_GEOIPDB_PATH < /dev/null
+   sshpass -e scp -P $MMGEOIP2ADC_ADC_PORT Citrix_Netscaler_InBuilt_GeoIP_DB_IPv* $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP:$MMGEOIP2ADC_ADC_GEOIPDB_PATH < /dev/null
    echo "Adding IPv4 and IPv6 GeoIP location files to ADC configuration for use in GSLB and PI..."
    # Add the location db files (benign if already present in config)
-   sshpass -e ssh -q $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP -p $MMGEOIP2ADC_ADC_PORT "add locationFile $MMGEOIP2ADC_ADC_GEOIPDB_PATH/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -format netscaler"  < /dev/null
-   sshpass -e ssh -q $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP -p $MMGEOIP2ADC_ADC_PORT "add locationFile6 $MMGEOIP2ADC_ADC_GEOIPDB_PATH/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -format netscaler" < /dev/null
+   sshpass -e ssh $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP -p $MMGEOIP2ADC_ADC_PORT "add locationFile $MMGEOIP2ADC_ADC_GEOIPDB_PATH/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv4 -format netscaler"  < /dev/null
+   sshpass -e ssh $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP -p $MMGEOIP2ADC_ADC_PORT "add locationFile6 $MMGEOIP2ADC_ADC_GEOIPDB_PATH/Citrix_Netscaler_InBuilt_GeoIP_DB_IPv6 -format netscaler" < /dev/null
    # Save the ns.conf - this will also invoke the filesync process to synchronize the db files to ha peer nodes or cluster nodes (note - watchdog will also eventually do this)
    echo "Saving configuration and invoking filesync..."
-   sshpass -e ssh -q $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP -p $MMGEOIP2ADC_ADC_PORT "save config"  < /dev/null
+   sshpass -e ssh $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP -p $MMGEOIP2ADC_ADC_PORT "save config"  < /dev/null
 else
   echo "The checksum failed.  File is corrupt or tampered with in transit..."
   do_cleanup
   exit 1
 fi
 
-#do_cleanup
+# Run cleanup routine
+do_cleanup
 
 echo "All done..."
 >> $LOGFILE) 2>&1 | ts '[%H:%M:%S]' | tee -a $LOGFILE
