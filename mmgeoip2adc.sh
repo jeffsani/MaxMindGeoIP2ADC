@@ -6,7 +6,7 @@
 set -o pipefail
 
 (
-# Local Variables
+# Set local variables
 DBTYPE="City" #Choose Country or City
 LANGUAGE="en" #Choose en, de, fr, es, jp, pt-BR, ru, or zh"
 LOGFILE="./log/$(date '+%m%d%Y')-mmgeoip2adc.log"
@@ -28,9 +28,9 @@ while getopts 'fu' OPTION; do
     f)
       FORCERUN=true
       # Initiate Log
-      echo "User $(whoami) started the script" | ts '[%H:%M:%S]' | tee -a $LOGFILE
-      echo "Starting MaxMindGeoIP2ADC Log..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
-      echo "Force parameter detected - skipping freshness check..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+      echo "User $(whoami) started the script"
+      echo "Starting MaxMindGeoIP2ADC Log..."
+      echo "Force parameter detected - skipping freshness check..."
       ;;
     u)
       echo "script usage: $(basename $0) [-f] [-u]" >&2
@@ -43,8 +43,8 @@ while getopts 'fu' OPTION; do
     *)
       FORCERUN=false
       # Initiate Log
-      echo "User $(whoami) started the script" | ts '[%H:%M:%S]' | tee -a $LOGFILE
-      echo "Starting MaxMindGeoIP2ADC Log..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+      echo "User $(whoami) started the script"
+      echo "Starting MaxMindGeoIP2ADC Log..."
       ;;
   esac
 done

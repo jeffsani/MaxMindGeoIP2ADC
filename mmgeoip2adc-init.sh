@@ -4,16 +4,16 @@
 
 set -o pipefail
 
-#Variables
+# Set local variables
 LOGFILE="./log/$(date '+%m%d%Y')-mmgeoip2adc-init.log"
 NSC2E_CONF=~/.adcrc
 
 (
-#Create log directory and conf if they do not already exist
+# Create log directory and conf if they do not already exist
 echo "checking for log directory and configuration file and creating if not present..."
 [ ! -d "./log" ] && mkdir log; [ ! -f "$NSC2E_CONF" ] && touch $NSC2E_CONF
 
-# Prompt for and set bash variables 
+# Prompt for and set  variables 
 echo "Setting script variables..."
 echo "Enter your MaxMind License Key: "; read LICENSE
 echo "Enter your MaxMind Edition [GeoLite2 or GeoIP2]: "; read LICENSE_EDITION
@@ -22,7 +22,7 @@ echo "Enter the Citrix ADC user password: "; read -s ADC_PASSWD
 echo "Enter your Citrix ADC NSIP: "; read NSIP
 echo "Enter your Citrix ADC NSIP Port: "; read NSIP_PORT
 
-#Load common variables from conf and check vars
+# Load common variables from conf and check vars to see if one of the required environment variables is not set
 . $NSC2E_CONF
 
 if [[ ! -z "$LICENSE_KEY" && ! -z "EDITION" && ! -z "$MMGEOIP2ADC_ADC_USER" && ! -z "$MMGEOIP2ADC_ADC_PASSWORD" && ! -z "$MMGEOIP2ADC_ADC_IP" && ! -z "$MMGEOIP2ADC_ADC_PORT" ]]; then
