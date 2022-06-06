@@ -120,8 +120,7 @@ if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
    fi
    # Unzip converted files
    echo "Preparing files for transfer to ADC..."
-   gunzip Citrix_Netscaler_InBuilt_GeoIP_DB*   
- 
+   gunzip Citrix_Netscaler_InBuilt_GeoIP_DB*
    # Transfer the files to the ADC
    echo "Transfering files to ADC..."
    sshpass -e scp -P $MMGEOIP2ADC_ADC_PORT Citrix_Netscaler_InBuilt_GeoIP_DB_IPv* $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP:$MMGEOIP2ADC_ADC_GEOIPDB_PATH < /dev/null
@@ -133,9 +132,9 @@ if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
    echo "Saving configuration and invoking filesync..."
    sshpass -e ssh $MMGEOIP2ADC_ADC_USER@$MMGEOIP2ADC_ADC_IP -p $MMGEOIP2ADC_ADC_PORT "save config"  < /dev/null
 else
-  echo "The checksum failed.  File is corrupt or tampered with in transit..."
-  do_cleanup
-  exit 1
+   echo "The checksum failed.  File is corrupt or tampered with in transit..."
+   do_cleanup
+   exit 1
 fi
 
 # Run cleanup routine
