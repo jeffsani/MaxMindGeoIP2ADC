@@ -6,11 +6,12 @@ set -o pipefail
 
 #Variables
 LOGFILE="./log/$(date '+%m%d%Y')-mmgeoip2adc-init.log"
+NSC2E_CONF=~/.adcrc
 
 (
-#Create log directory if it does not already exist
-echo "checking for log directory and creating if not present..."
-[ ! -d "./log" ] && mkdir log
+#Create log directory and conf if they do not already exist
+echo "checking for log directory and configuration file and creating if not present..."
+[ ! -d "./log" ] && mkdir log; [ ! -f "$NSC2E_CONF" ] && touch $NSC2E_CONF
 
 # Prompt for and set bash variables 
 echo "Setting script variables..."
@@ -20,42 +21,25 @@ echo "Enter the Citrix ADC user for the script: "; read ADC_USER
 echo "Enter the Citrix ADC user password: "; read -s ADC_PASSWD
 echo "Enter your Citrix ADC NSIP: "; read NSIP
 echo "Enter your Citrix ADC NSIP Port: "; read NSIP_PORT
-if [[ $- == *i* ]]; then
-   echo "Running interactively so loading bash_profile vars..."
-   source ~/.bash_profile
-else
-   echo "Running non-interactively so loading bashrc vars..."
-   source ~/.bashrc
-fi
-if [[ ! -z "$LICENSE_KEY" && ! -z "EDITION" && ! -z "$MMGEOIP2ADC_ADC_USER" && ! -z "$MMGEOIP2ADC_ADC_PASSWORD" && ! -z "$MMGEOIP2ADC_ADC_IP" && ! -z "$MMGEOIP2ADC_ADC_PORT" && ! -z "$SSHPASS" ]]; then
-   echo "Exisitng variables detected - refreshing values..."
-   sed -i -e "s/LICENSE_KEY=.*/LICENSE_KEY=$LICENSE/" -e "s/EDITION=.*/EDITION=$LICENSE_EDITION/" -e "s/MMGEOIP2ADC_ADC_USER=.*/MMGEOIP2ADC_ADC_USER=$ADC_USER/" -e "s/MMGEOIP2ADC_ADC_PASSWORD=.*/MMGEOIP2ADC_ADC_PASSWORD=\'$ADC_PASSWD\'/" -e "s/MMGEOIP2ADC_ADC_IP=.*/MMGEOIP2ADC_ADC_IP=$NSIP/" -e "s/MMGEOIP2ADC_ADC_PORT=.*/MMGEOIP2ADC_ADC_PORT=$NSIP_PORT/" -e "s/SSHPASS=.*/SSHPASS=\'$ADC_PASSWD\'/" ~/.bashrc
-   sed -i -e "s/LICENSE_KEY=.*/LICENSE_KEY=$LICENSE/" -e "s/EDITION=.*/EDITION=$LICENSE_EDITION/" -e "s/MMGEOIP2ADC_ADC_USER=.*/MMGEOIP2ADC_ADC_USER=$ADC_USER/" -e "s/MMGEOIP2ADC_ADC_PASSWORD=.*/MMGEOIP2ADC_ADC_PASSWORD=\'$ADC_PASSWD\'/" -e "s/MMGEOIP2ADC_ADC_IP=.*/MMGEOIP2ADC_ADC_IP=$NSIP/" -e "s/MMGEOIP2ADC_ADC_PORT=.*/MMGEOIP2ADC_ADC_PORT=$NSIP_PORT/" -e "s/SSHPASS=.*/SSHPASS=\'$ADC_PASSWD\'/" ~/.bash_profile
-else
-cat >>~/.bashrc <<-EOF
-#Start-mmgeoip2adc-Vars
-export LICENSE_KEY="$LICENSE"
-export EDITION="$LICENSE_EDITION"
-export MMGEOIP2ADC_ADC_USER="$ADC_USER"
-export MMGEOIP2ADC_ADC_PASSWORD='$ADC_PASSWD'
-export MMGEOIP2ADC_ADC_IP="$NSIP"
-export MMGEOIP2ADC_ADC_PORT="$NSIP_PORT"
-export SSHPASS='$ADC_PASSWD'
-#End-mmgeoip2adc-Vars
-EOF
-cat >>~/.bash_profile <<-EOF
-#Start-mmgeoip2adc-Vars
-export LICENSE_KEY="$LICENSE"
-export EDITION="$LICENSE_EDITION"
-export MMGEOIP2ADC_ADC_USER="$ADC_USER"
-export MMGEOIP2ADC_ADC_PASSWORD='$ADC_PASSWD'
-export MMGEOIP2ADC_ADC_IP="$NSIP"
-export MMGEOIP2ADC_ADC_PORT="$NSIP_PORT"
-export SSHPASS='$ADC_PASSWD'
-#End-mmgeoip2adc-Vars
-EOF
-fi
 
+#Load common variables from conf and check vars
+. $NSC2E_CONF
+
+if [[ ! -z "$LICENSE_KEY" && ! -z "EDITION" && ! -z "$MMGEOIP2ADC_ADC_USER" && ! -z "$MMGEOIP2ADC_ADC_PASSWORD" && ! -z "$MMGEOIP2ADC_ADC_IP" && ! -z "$MMGEOIP2ADC_ADC_PORT" ]]; then
+   echo "Exisitng variables detected - refreshing values..."
+   sed -i -e "s/LICENSE_KEY=.*/LICENSE_KEY=$LICENSE/" -e "s/EDITION=.*/EDITION=$LICENSE_EDITION/" -e "s/MMGEOIP2ADC_ADC_USER=.*/MMGEOIP2ADC_ADC_USER=$ADC_USER/" -e "s/MMGEOIP2ADC_ADC_PASSWORD=.*/MMGEOIP2ADC_ADC_PASSWORD=\'$ADC_PASSWD\'/" -e "s/MMGEOIP2ADC_ADC_IP=.*/MMGEOIP2ADC_ADC_IP=$NSIP/" -e "s/MMGEOIP2ADC_ADC_PORT=.*/MMGEOIP2ADC_ADC_PORT=$NSIP_PORT/" $NSC2E_CONF
+else
+cat >>$NSC2E_CONF <<-EOF
+#Start-mmgeoip2adc-Vars
+export LICENSE_KEY="$LICENSE"
+export EDITION="$LICENSE_EDITION"
+export MMGEOIP2ADC_ADC_USER="$ADC_USER"
+export MMGEOIP2ADC_ADC_PASSWORD='$ADC_PASSWD'
+export MMGEOIP2ADC_ADC_IP="$NSIP"
+export MMGEOIP2ADC_ADC_PORT="$NSIP_PORT"
+#End-mmgeoip2adc-Vars
+EOF
+fi
 echo "Script variables set successfully..."
 
 # Download and install pre-requisites
@@ -80,21 +64,22 @@ else
 fi
 
 # Check known_hosts file and presence of NSIP and add if not present
+echo "Checking for presence of $NSIP in ~/.ssh/known_hosts..."
 if [ ! -r ~/.ssh/known_hosts ]; then mkdir -p ~/.ssh; touch ~/.ssh/known_hosts; fi
 if [ $NSIP_PORT -eq "22" ]; then
    ssh-keygen -F $NSIP -f ~/.ssh/known_hosts &>/dev/null
    if [ "$?" -ne "0" ]; then 
       # Add ADC to known_hosts
-      echo "Adding ADC IP $NSIP to known_hosts..."
+      echo "Adding ADC IP $NSIP not present in known_hosts - Adding IP..."
       ssh-keyscan $NSIP >> ~/.ssh/known_hosts 2> /dev/null
    else
-      echo "ADC IP already present in known_hosts - Skipping add..."
+      echo "ADC IP $NSIP already present in known_hosts - Skipping add..."
    fi
 else 
    ssh-keygen -F '[$NSIP]:$NSIP_PORT' -f ~/.ssh/known_hosts &>/dev/null
    if [ "$?" -ne "0" ]; then 
       # Add ADC to known_hosts
-      echo "Adding ADC IP $NSIP to known_hosts..."
+      echo "Adding ADC IP $NSIP not present in known_hosts - Adding IP..."
       ssh-keyscan -p $NSIP_PORT $NSIP >> ~/.ssh/known_hosts 2> /dev/null
    else
       echo "ADC IP $NSIP already present in known_hosts - Skipping add..."
@@ -115,6 +100,7 @@ else
 fi
 crontab mmgeoip2adc
 rm mmgeoip2adc
+echo "Successfully created new cron job..."
 
 echo "All done!..."
 >> $LOGFILE) 2>&1 | ts '[%H:%M:%S]' | tee -a $LOGFILE

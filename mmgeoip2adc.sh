@@ -12,6 +12,7 @@ LANGUAGE="en" #Choose en, de, fr, es, jp, pt-BR, ru, or zh"
 LOGFILE="./log/$(date '+%m%d%Y')-mmgeoip2adc.log"
 CONVERSION_TOOL="Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl"
 MMGEOIP2ADC_ADC_GEOIPDB_PATH="/var/netscaler/inbuilt_db"
+NSC2E_CONF=~/.adcrc
 
 # Do Cleanup function
 function do_cleanup {
@@ -48,10 +49,16 @@ while getopts 'fu' OPTION; do
   esac
 done
 
+#Load common variables from conf and check vars
+. $NSC2E_CONF
+
 # Check to see if one of the required environment variables for the script is not set
-if [[ -z "$LICENSE_KEY" || -z "EDITION" || -z "$MMGEOIP2ADC_ADC_USER" || -z "$MMGEOIP2ADC_ADC_PASSWORD" || -z "$MMGEOIP2ADC_ADC_IP" || -z "$MMGEOIP2ADC_ADC_PORT" || -z "$SSHPASS" ]]; then
+if [[ -z "$LICENSE_KEY" || -z "EDITION" || -z "$MMGEOIP2ADC_ADC_USER" || -z "$MMGEOIP2ADC_ADC_PASSWORD" || -z "$MMGEOIP2ADC_ADC_IP" || -z "$MMGEOIP2ADC_ADC_PORT" ]]; then
     echo "One or more of the required environment variables for the script is not set properly..."
     exit 1
+else
+  #Set SSHPASS var for automation
+export SSHPASS="$NSC2E_ADC_PASSWORD"
 fi
 
 # Set GEODB_URL and GEODB_CHECKSUM based on DBTYPE variable

@@ -48,7 +48,6 @@ The following variables and their respective values are required at script runti
    <li>CITRIX_ADC_PASSWORD=XXX</li>
    <li>CITRIX_ADC_IP=X.X.X.X</li>
    <li>CITRIX_ADC_PORT=NNN</li>
-   <li>SSHPASS=XXX</li>
 </ul>
 
 <strong>Script Usage</strong></br>
@@ -61,5 +60,4 @@ It is optional but recommended to create a service account on ADC to use for the
 
 <code>add system cmdPolicy geoip2adc_cmdpol ALLOW "(^(scp).\*/var/netscaler/inbuilt_db\*)|(^add\\s+(locationFile|locationFile6))|(^add\\s+(locationFile|locationFile6)\\s+.\*)|(^save\\s+ns\\s+config)|(^save\\s+ns\\s+config\\s+.\*)"</code></br>
 <code>add system user geoip2adc -timeout 900 -maxsession 2 -allowedManagementInterface CLI</code></br>
-<code>set system user geoip2adc -password XXXXXX</code></br>
 <code>bind system user geoip2adc geoip2adc_cmdpol 100</code>
