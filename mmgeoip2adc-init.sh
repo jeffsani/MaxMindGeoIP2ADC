@@ -29,6 +29,7 @@ if [[ ! -z "$LICENSE_KEY" && ! -z "EDITION" && ! -z "$MMGEOIP2ADC_ADC_USER" && !
    echo "Exisitng variables detected - refreshing values..."
    sed -i -e "s/LICENSE_KEY=.*/LICENSE_KEY=$LICENSE/" -e "s/EDITION=.*/EDITION=$LICENSE_EDITION/" -e "s/MMGEOIP2ADC_ADC_USER=.*/MMGEOIP2ADC_ADC_USER=$ADC_USER/" -e "s/MMGEOIP2ADC_ADC_PASSWORD=.*/MMGEOIP2ADC_ADC_PASSWORD=\'$ADC_PASSWD\'/" -e "s/MMGEOIP2ADC_ADC_IP=.*/MMGEOIP2ADC_ADC_IP=$NSIP/" -e "s/MMGEOIP2ADC_ADC_PORT=.*/MMGEOIP2ADC_ADC_PORT=$NSIP_PORT/" $NSC2E_CONF
 else
+   echo "No existing variables detected - updating conf..."
 cat >>$NSC2E_CONF <<-EOF
 #Start-mmgeoip2adc-Vars
 export LICENSE_KEY="$LICENSE"
