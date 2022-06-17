@@ -14,7 +14,7 @@ The main benefit of this script is to keep the location files up-to-date as thes
 <ol type="1">
    <li>Login to your host as the user you want to create the script under</li>
    <li>Install the required Linux packages or follow this prompt in the init script</li>
-   <li>Complete steps 2-4 in the requirements below for access to the MaxMind GeoLite2 or GeoIP2 databases</li>
+   <li>Complete steps 3-5 in the requirements below for access to the MaxMind GeoLite2 or GeoIP2 databases</li>
    <li>Clone the repo into the desired directory on your linux host:</li>
       <ul><li>git clone https://github.com/jeffsani/MaxMindGeoIP2ADC.git</li></ul>
    <li>cd to MaxMindGeoIP2ADC</li>
