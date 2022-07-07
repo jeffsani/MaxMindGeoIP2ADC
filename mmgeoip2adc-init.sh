@@ -58,7 +58,7 @@ fi
 # Download NetScaler format conversion script in to same directory
 echo "Checking for MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format repo..."
 if [[ ! -e "./Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl" ]]; then
-   echo "Conversion tool not present - downloading from github..." | ts '[%H:%M:%S]' | tee -a $LOGFILE
+   echo "Conversion tool not present - downloading from github..."
    curl -s -O -J https://raw.githubusercontent.com/citrix/MaxMind-GeoIP-Database-Conversion-Citrix-ADC-Format/master/Convert_GeoIPDB_To_Netscaler_Format_WithContinent.pl
 else
    echo "Conversion tool already present - skipping download..."

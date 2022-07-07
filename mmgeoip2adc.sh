@@ -101,7 +101,7 @@ else
 fi
 
 # Compare downloaded file to checksum and start file processing
-echo "Comparing sha256 checksum to verify file integrity before preoceeding..."
+echo "Comparing sha256 checksum to verify file integrity before proceeding..."
 CHECKSUM=$(sha256sum -c $GEOIPDB_CHECKSUM_FILE | awk {'print $2'}) 
 if [[ "$CHECKSUM" == "OK" ]]; then #convert and transfer file to ADC
    echo "The MaxMind $EDITION Database file checksum is verified. Unpacking archive for conversion..."
